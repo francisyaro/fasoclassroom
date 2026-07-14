@@ -2065,3 +2065,47 @@ table th, table td {
     color: var(--accent);
 }
 
+/* Desktop Sidebar Toggle Styles */
+.desktop-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.desktop-toggle-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .desktop-toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.desktop-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Sidebar hidden state styling */
+.sidebar-hidden .main-sidebar {
+    transform: translateX(-100%);
+}
+
+.sidebar-hidden .main-viewport {
+    margin-left: 0;
+}
+
+@media (max-width: 850px) {
+    .desktop-toggle-btn {
+        display: none !important;
+    }
+}
+

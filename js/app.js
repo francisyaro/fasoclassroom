@@ -149,6 +149,14 @@ function setupNavigation() {
     }
 }
 
+function toggleDesktopSidebar() {
+    const appShell = document.querySelector('.app-shell');
+    if (appShell) {
+        appShell.classList.toggle('sidebar-hidden');
+    }
+}
+window.toggleDesktopSidebar = toggleDesktopSidebar;
+
 function navigateTo(pageName, params = {}) {
     if (isExamActive) {
         if (!confirm("Attention : Quitter cette page annulera votre examen en cours. Êtes-vous sûr ?")) {
