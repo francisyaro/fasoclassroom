@@ -1,5 +1,67 @@
 // COURSES et store sont accédés directement depuis le scope global
 
+// Overriding browser alert and confirm with custom HTML modals
+function showCustomAlert(message, title = "Notification") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-alert-modal');
+        if (!modal) {
+            console.log("Fallback Alert: " + message);
+            resolve(true);
+            return;
+        }
+        const titleEl = document.getElementById('custom-alert-title');
+        const messageEl = document.getElementById('custom-alert-message');
+        const okBtn = document.getElementById('custom-alert-btn-ok');
+        const cancelBtn = document.getElementById('custom-alert-btn-cancel');
+
+        titleEl.textContent = title;
+        messageEl.innerHTML = String(message).replace(/\n/g, '<br>');
+        cancelBtn.style.display = 'none';
+        okBtn.textContent = 'OK';
+        modal.style.display = 'flex';
+
+        okBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(true);
+        };
+    });
+}
+window.showCustomAlert = showCustomAlert;
+window.alert = showCustomAlert;
+
+function showCustomConfirm(message, title = "Confirmation") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-alert-modal');
+        if (!modal) {
+            console.log("Fallback Confirm: " + message);
+            resolve(false);
+            return;
+        }
+        const titleEl = document.getElementById('custom-alert-title');
+        const messageEl = document.getElementById('custom-alert-message');
+        const okBtn = document.getElementById('custom-alert-btn-ok');
+        const cancelBtn = document.getElementById('custom-alert-btn-cancel');
+
+        titleEl.textContent = title;
+        messageEl.innerHTML = String(message).replace(/\n/g, '<br>');
+        cancelBtn.style.display = 'block';
+        cancelBtn.textContent = 'Annuler';
+        okBtn.textContent = 'Confirmer';
+        modal.style.display = 'flex';
+
+        okBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(true);
+        };
+
+        cancelBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(false);
+        };
+    });
+}
+window.showCustomConfirm = showCustomConfirm;
+
 // Global variables for active sessions
 let activeCourse = null;
 let activeLesson = null;
@@ -157,9 +219,10 @@ function toggleDesktopSidebar() {
 }
 window.toggleDesktopSidebar = toggleDesktopSidebar;
 
-function navigateTo(pageName, params = {}) {
+async function navigateTo(pageName, params = {}) {
     if (isExamActive) {
-        if (!confirm("Attention : Quitter cette page annulera votre examen en cours. Êtes-vous sûr ?")) {
+        const isConfirmed = await showCustomConfirm("Attention : Quitter cette page annulera votre examen en cours. Êtes-vous sûr ?");
+        if (!isConfirmed) {
             return;
         }
         stopExam(false);
@@ -2278,7 +2341,8 @@ async function saveBOUser() {
 window.saveBOUser = saveBOUser;
 
 async function deleteBOUser(userId, name) {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${name}" ?\nCette action retirera son profil.`)) {
+    const isConfirmed = await showCustomConfirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${name}" ?\nCette action retirera son profil.`);
+    if (!isConfirmed) {
         return;
     }
 
@@ -2364,7 +2428,8 @@ function renderBOCourses() {
 window.renderBOCourses = renderBOCourses;
 
 async function deleteBOCourse(courseId, title) {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer le cours "${title}" ?\nCette action le retirera du catalogue.`)) {
+    const isConfirmed = await showCustomConfirm(`Êtes-vous sûr de vouloir supprimer le cours "${title}" ?\nCette action le retirera du catalogue.`);
+    if (!isConfirmed) {
         return;
     }
 

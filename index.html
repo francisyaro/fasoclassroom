@@ -719,9 +719,16 @@
                                         <textarea id="builder-course-desc" rows="3" placeholder="Présentez les objectifs de la formation..." required style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff; resize: vertical;"></textarea>
                                     </div>
 
-                                    <div class="form-group" style="margin-bottom: 2rem;">
-                                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Illustration du cours (Image URL / optionnelle)</label>
-                                        <input type="text" id="builder-course-image" placeholder="Ex: https://images.unsplash.com/... ou laissez vide pour utiliser l'illustration générique" style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff;">
+                                    <div class="form-group" style="margin-bottom: 2.5rem;">
+                                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Illustration du cours (Image/Photo/Illustration)</label>
+                                        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                                            <input type="text" id="builder-course-image" placeholder="Saisissez une URL d'image ou téléversez un fichier local..." style="flex-grow: 1; min-width: 200px; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff;">
+                                            <label class="btn btn-outline" style="margin: 0; padding: 0.8rem 1.25rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; border-color: var(--accent); color: var(--accent); font-weight: 600; font-size: 0.85rem;">
+                                                📁 Téléverser une image
+                                                <input type="file" id="builder-course-image-file" accept="image/*" onchange="window.handleBuilderImageUpload(this)" style="display: none;">
+                                            </label>
+                                        </div>
+                                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 0.4rem;">Copiez-collez l'adresse d'une image internet ou cliquez sur le bouton pour importer une photo PNG/JPG depuis votre ordinateur.</span>
                                     </div>
 
                                     <!-- Modules list container -->
@@ -829,6 +836,18 @@
                 </section>
 
             </main>
+        </div>
+    </div>
+
+    <!-- CUSTOM ALERT / CONFIRM MODAL -->
+    <div id="custom-alert-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 20000; padding: 1.5rem;">
+        <div class="card" style="width: 100%; max-width: 420px; padding: 1.75rem; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-color); background: var(--bg-card); box-shadow: var(--shadow-lg); color: var(--text-main);">
+            <h4 id="custom-alert-title" style="font-size: 1.2rem; margin-bottom: 0.75rem; color: #fff; font-weight: 700;">Notification</h4>
+            <p id="custom-alert-message" style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 1.5rem; line-height: 1.5; text-align: center;"></p>
+            <div id="custom-alert-buttons" style="display: flex; gap: 0.75rem; justify-content: center; width: 100%;">
+                <button type="button" id="custom-alert-btn-cancel" class="btn btn-outline" style="display: none; padding: 0.5rem 1.25rem; font-size: 0.85rem; border-color: var(--border-color); color: var(--text-muted); cursor: pointer;">Annuler</button>
+                <button type="button" id="custom-alert-btn-ok" class="btn btn-primary" style="background: #5C2D91; border-color: #5C2D91; padding: 0.5rem 1.75rem; font-size: 0.85rem; cursor: pointer; color: #fff; font-weight: 600;">OK</button>
+            </div>
         </div>
     </div>
 
@@ -2733,6 +2752,68 @@ window.appStore = store;
     <script>
 // COURSES et store sont accédés directement depuis le scope global
 
+// Overriding browser alert and confirm with custom HTML modals
+function showCustomAlert(message, title = "Notification") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-alert-modal');
+        if (!modal) {
+            console.log("Fallback Alert: " + message);
+            resolve(true);
+            return;
+        }
+        const titleEl = document.getElementById('custom-alert-title');
+        const messageEl = document.getElementById('custom-alert-message');
+        const okBtn = document.getElementById('custom-alert-btn-ok');
+        const cancelBtn = document.getElementById('custom-alert-btn-cancel');
+
+        titleEl.textContent = title;
+        messageEl.innerHTML = String(message).replace(/\n/g, '<br>');
+        cancelBtn.style.display = 'none';
+        okBtn.textContent = 'OK';
+        modal.style.display = 'flex';
+
+        okBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(true);
+        };
+    });
+}
+window.showCustomAlert = showCustomAlert;
+window.alert = showCustomAlert;
+
+function showCustomConfirm(message, title = "Confirmation") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-alert-modal');
+        if (!modal) {
+            console.log("Fallback Confirm: " + message);
+            resolve(false);
+            return;
+        }
+        const titleEl = document.getElementById('custom-alert-title');
+        const messageEl = document.getElementById('custom-alert-message');
+        const okBtn = document.getElementById('custom-alert-btn-ok');
+        const cancelBtn = document.getElementById('custom-alert-btn-cancel');
+
+        titleEl.textContent = title;
+        messageEl.innerHTML = String(message).replace(/\n/g, '<br>');
+        cancelBtn.style.display = 'block';
+        cancelBtn.textContent = 'Annuler';
+        okBtn.textContent = 'Confirmer';
+        modal.style.display = 'flex';
+
+        okBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(true);
+        };
+
+        cancelBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(false);
+        };
+    });
+}
+window.showCustomConfirm = showCustomConfirm;
+
 // Global variables for active sessions
 let activeCourse = null;
 let activeLesson = null;
@@ -2890,9 +2971,10 @@ function toggleDesktopSidebar() {
 }
 window.toggleDesktopSidebar = toggleDesktopSidebar;
 
-function navigateTo(pageName, params = {}) {
+async function navigateTo(pageName, params = {}) {
     if (isExamActive) {
-        if (!confirm("Attention : Quitter cette page annulera votre examen en cours. Êtes-vous sûr ?")) {
+        const isConfirmed = await showCustomConfirm("Attention : Quitter cette page annulera votre examen en cours. Êtes-vous sûr ?");
+        if (!isConfirmed) {
             return;
         }
         stopExam(false);
@@ -5011,7 +5093,8 @@ async function saveBOUser() {
 window.saveBOUser = saveBOUser;
 
 async function deleteBOUser(userId, name) {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${name}" ?\nCette action retirera son profil.`)) {
+    const isConfirmed = await showCustomConfirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${name}" ?\nCette action retirera son profil.`);
+    if (!isConfirmed) {
         return;
     }
 
@@ -5097,7 +5180,8 @@ function renderBOCourses() {
 window.renderBOCourses = renderBOCourses;
 
 async function deleteBOCourse(courseId, title) {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer le cours "${title}" ?\nCette action le retirera du catalogue.`)) {
+    const isConfirmed = await showCustomConfirm(`Êtes-vous sûr de vouloir supprimer le cours "${title}" ?\nCette action le retirera du catalogue.`);
+    if (!isConfirmed) {
         return;
     }
 
