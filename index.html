@@ -3402,9 +3402,15 @@ function renderDashboard() {
                 <div class="progress-bar-container" style="margin-bottom: 0.8rem;">
                     <div class="progress-bar-fill" style="width: ${percent}%;"></div>
                 </div>
-                <button class="btn btn-primary resume-btn" data-id="${course.id}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
-                    Reprendre le cours
-                </button>
+                <div style="display: flex; align-items: center; gap: 1rem; justify-content: space-between; flex-wrap: wrap;">
+                    <button class="btn btn-primary resume-btn" data-id="${course.id}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                        Reprendre le cours
+                    </button>
+                    ${store.hasPaid() ? 
+                        `<span style="color: #25d366; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.25rem;">✅ Payé & Débloqué</span>` : 
+                        `<span style="color: #ff9800; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.25rem;">🔒 Paiement Requis</span>`
+                    }
+                </div>
             `;
             activeItem.querySelector('.resume-btn').addEventListener('click', () => {
                 startCourse(course.id);
@@ -3494,7 +3500,14 @@ function renderCarouselItems() {
         card.style.background = `linear-gradient(135deg, hsla(252, 80%, 30%, 0.15), var(--bg-card))`;
         card.innerHTML = `
             <div>
-                <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">Recommandé</span>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">Recommandé</span>
+                    ${store.getCurrentUser() && store.getCurrentUser().role === 'Étudiant' ? (
+                        store.hasPaid() ? 
+                        `<span style="font-size: 0.7rem; font-weight: 700; color: #25d366;">🔓 Débloqué</span>` : 
+                        `<span style="font-size: 0.7rem; font-weight: 700; color: #ff9800;">🔒 Payant</span>`
+                    ) : ''}
+                </div>
                 <h4 style="font-size: 1rem; margin-top: 0.4rem; line-height: 1.3;">${course.title}</h4>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
@@ -3585,8 +3598,15 @@ function filterCatalogCourses(filterText) {
             <div class="course-thumbnail" style="height: 140px; border-radius: var(--radius-md); margin-bottom: 1rem; overflow: hidden; border: 1px solid var(--border-color);">
                 <img src="${coverImg}" alt="${course.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
             </div>
-            <span class="course-badge lvl-${course.level}">${course.levelText}</span>
-            <h3 class="course-title">${course.title}</h3>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem; align-items: center; flex-wrap: wrap;">
+                <span class="course-badge lvl-${course.level}">${course.levelText}</span>
+                ${currentUser && currentUser.role === 'Étudiant' ? (
+                    store.hasPaid() ? 
+                    `<span class="course-badge" style="background: rgba(37, 211, 102, 0.1); color: #25d366; border: 1px solid rgba(37, 211, 102, 0.25); border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.7rem; font-weight: 600; display: inline-flex; align-items: center;">🔓 Débloqué</span>` : 
+                    `<span class="course-badge" style="background: rgba(255, 152, 0, 0.1); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.25); border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.7rem; font-weight: 600; display: inline-flex; align-items: center;">🔒 Paiement Requis</span>`
+                ) : ''}
+            </div>
+            <h3 class="course-title" style="margin-top: 0;">${course.title}</h3>
             <p class="course-desc">${course.description}</p>
             <div class="course-meta" style="margin-bottom: 1.2rem;">
                 <span>⏱️ ${course.duration}</span>
