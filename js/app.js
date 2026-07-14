@@ -1471,15 +1471,19 @@ function initBackOfficePage() {
     // 1. Tab Toggles
     const tabStudents = document.getElementById('tab-bo-students');
     const tabBuilder = document.getElementById('tab-bo-builder');
+    const tabCourses = document.getElementById('tab-bo-courses');
     const panelStudents = document.getElementById('panel-bo-students');
     const panelBuilder = document.getElementById('panel-bo-builder');
+    const panelCourses = document.getElementById('panel-bo-courses');
 
-    if (tabStudents && tabBuilder && panelStudents && panelBuilder) {
+    if (tabStudents && tabBuilder && tabCourses && panelStudents && panelBuilder && panelCourses) {
         tabStudents.onclick = async () => {
             tabStudents.classList.add('active');
             tabBuilder.classList.remove('active');
+            tabCourses.classList.remove('active');
             panelStudents.style.display = 'block';
             panelBuilder.style.display = 'none';
+            panelCourses.style.display = 'none';
             await updateBOStats();
             await renderBOStudents();
         };
@@ -1487,9 +1491,22 @@ function initBackOfficePage() {
         tabBuilder.onclick = () => {
             tabBuilder.classList.add('active');
             tabStudents.classList.remove('active');
+            tabCourses.classList.remove('active');
             panelBuilder.style.display = 'block';
             panelStudents.style.display = 'none';
+            panelCourses.style.display = 'none';
+            document.getElementById('btn-builder-submit').textContent = "Publier le cours dans le Catalogue";
             resetCourseBuilderForm();
+        };
+
+        tabCourses.onclick = () => {
+            tabCourses.classList.add('active');
+            tabStudents.classList.remove('active');
+            tabBuilder.classList.remove('active');
+            panelCourses.style.display = 'block';
+            panelStudents.style.display = 'none';
+            panelBuilder.style.display = 'none';
+            renderBOCourses();
         };
     }
 
@@ -1611,6 +1628,10 @@ async function renderBOStudents() {
             const actionTd = document.createElement('td');
             actionTd.style.padding = '1rem 0.5rem';
             actionTd.style.textAlign = 'right';
+            actionTd.style.display = 'flex';
+            actionTd.style.gap = '0.5rem';
+            actionTd.style.justifyContent = 'flex-end';
+            
             const detailBtn = document.createElement('button');
             detailBtn.className = 'btn btn-outline';
             detailBtn.style.padding = '0.35rem 0.7rem';
@@ -1618,6 +1639,25 @@ async function renderBOStudents() {
             detailBtn.textContent = 'Détails 🔎';
             detailBtn.onclick = () => showStudentDetails(student);
             actionTd.appendChild(detailBtn);
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn btn-outline';
+            editBtn.style.padding = '0.35rem 0.7rem';
+            editBtn.style.fontSize = '0.8rem';
+            editBtn.textContent = 'Modifier ✏️';
+            editBtn.onclick = () => openEditUserModal(student);
+            actionTd.appendChild(editBtn);
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-outline';
+            deleteBtn.style.padding = '0.35rem 0.7rem';
+            deleteBtn.style.fontSize = '0.8rem';
+            deleteBtn.style.borderColor = 'var(--danger)';
+            deleteBtn.style.color = 'var(--danger)';
+            deleteBtn.textContent = 'Supprimer 🗑️';
+            deleteBtn.onclick = () => deleteBOUser(student.id, student.name);
+            actionTd.appendChild(deleteBtn);
+
             row.appendChild(actionTd);
 
             listContainer.appendChild(row);
@@ -1679,6 +1719,15 @@ function showStudentDetails(student) {
 
 function resetCourseBuilderForm() {
     document.getElementById('form-course-builder').reset();
+    const idInput = document.getElementById('builder-course-id');
+    if (idInput) idInput.disabled = false;
+    
+    const formTitle = document.getElementById('bo-builder-title');
+    if (formTitle) formTitle.textContent = "Créer un nouveau cours";
+    
+    const submitBtn = document.getElementById('btn-builder-submit');
+    if (submitBtn) submitBtn.textContent = "Publier le cours dans le Catalogue";
+
     const container = document.getElementById('builder-modules-list');
     container.innerHTML = '';
     builderModulesCount = 0;
@@ -2114,4 +2163,344 @@ async function finalizeSuccessPayment() {
     renderDashboard();
 }
 window.finalizeSuccessPayment = finalizeSuccessPayment;
+
+// --- USER CRUD FUNCTIONS ---
+
+function openCreateUserModal() {
+    document.getElementById('bo-user-modal-title').textContent = "Créer un utilisateur";
+    document.getElementById('bo-crud-user-id').value = "";
+    document.getElementById('bo-crud-user-name').value = "";
+    document.getElementById('bo-crud-user-email').value = "";
+    document.getElementById('bo-crud-user-password').value = "";
+    document.getElementById('bo-crud-password-group').style.display = "block";
+    document.getElementById('bo-crud-user-password').setAttribute('required', 'required');
+    document.getElementById('bo-crud-user-role').value = "Étudiant";
+    document.getElementById('bo-crud-user-paid').checked = false;
+    document.getElementById('bo-user-crud-modal').style.display = "flex";
+}
+window.openCreateUserModal = openCreateUserModal;
+
+function openEditUserModal(student) {
+    document.getElementById('bo-user-modal-title').textContent = "Modifier l'utilisateur";
+    document.getElementById('bo-crud-user-id').value = student.id;
+    document.getElementById('bo-crud-user-name').value = student.name;
+    document.getElementById('bo-crud-user-email').value = student.email;
+    document.getElementById('bo-crud-user-password').value = "";
+    document.getElementById('bo-crud-password-group').style.display = "none";
+    document.getElementById('bo-crud-user-password').removeAttribute('required');
+    document.getElementById('bo-crud-user-role').value = student.role || "Étudiant";
+    document.getElementById('bo-crud-user-paid').checked = student.hasPaid === true;
+    document.getElementById('bo-user-crud-modal').style.display = "flex";
+}
+window.openEditUserModal = openEditUserModal;
+
+function closeBOUserModal() {
+    document.getElementById('bo-user-crud-modal').style.display = "none";
+}
+window.closeBOUserModal = closeBOUserModal;
+
+async function saveBOUser() {
+    const id = document.getElementById('bo-crud-user-id').value;
+    const name = document.getElementById('bo-crud-user-name').value.trim();
+    const email = document.getElementById('bo-crud-user-email').value.trim();
+    const role = document.getElementById('bo-crud-user-role').value;
+    const hasPaid = document.getElementById('bo-crud-user-paid').checked;
+
+    try {
+        if (id) {
+            await store.updateBOUser(id, name, role, hasPaid);
+            alert("Utilisateur mis à jour avec succès !");
+        } else {
+            const password = document.getElementById('bo-crud-user-password').value;
+            if (!password || password.length < 6) {
+                alert("Veuillez saisir un mot de passe d'au moins 6 caractères.");
+                return;
+            }
+            await store.createBOUser(name, email, password, role, hasPaid);
+            alert("Nouvel utilisateur créé avec succès !");
+        }
+        closeBOUserModal();
+        await updateBOStats();
+        await renderBOStudents();
+    } catch (e) {
+        alert("Erreur lors de la sauvegarde : " + e.message);
+    }
+}
+window.saveBOUser = saveBOUser;
+
+async function deleteBOUser(userId, name) {
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${name}" ?\nCette action retirera son profil.`)) {
+        return;
+    }
+
+    try {
+        await store.deleteBOUser(userId);
+        alert("Utilisateur supprimé avec succès !");
+        await updateBOStats();
+        await renderBOStudents();
+    } catch (e) {
+        alert("Erreur lors de la suppression : " + e.message);
+    }
+}
+window.deleteBOUser = deleteBOUser;
+
+// --- COURSE CRUD FUNCTIONS ---
+
+function renderBOCourses() {
+    const listContainer = document.getElementById('bo-courses-list');
+    if (!listContainer) return;
+
+    listContainer.innerHTML = '';
+    const courses = store.getCourses();
+
+    if (courses.length === 0) {
+        listContainer.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem;">Aucun cours disponible.</td></tr>';
+        return;
+    }
+
+    courses.forEach(course => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid var(--border-color)';
+        row.style.fontSize = '0.9rem';
+
+        const titleTd = document.createElement('td');
+        titleTd.style.padding = '1rem 0.5rem';
+        titleTd.innerHTML = `<strong>${course.title}</strong>`;
+        row.appendChild(titleTd);
+
+        const idTd = document.createElement('td');
+        idTd.style.padding = '1rem 0.5rem';
+        idTd.innerHTML = `<code style="font-family: monospace;">${course.id}</code>`;
+        row.appendChild(idTd);
+
+        const levelTd = document.createElement('td');
+        levelTd.style.padding = '1rem 0.5rem';
+        levelTd.textContent = course.levelText || course.level || 'Intermédiaire';
+        row.appendChild(levelTd);
+
+        const durationTd = document.createElement('td');
+        durationTd.style.padding = '1rem 0.5rem';
+        durationTd.textContent = course.duration || 'N/A';
+        row.appendChild(durationTd);
+
+        const actionsTd = document.createElement('td');
+        actionsTd.style.padding = '1rem 0.5rem';
+        actionsTd.style.textAlign = 'right';
+        actionsTd.style.display = 'flex';
+        actionsTd.style.gap = '0.5rem';
+        actionsTd.style.justifyContent = 'flex-end';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-outline';
+        editBtn.style.padding = '0.35rem 0.7rem';
+        editBtn.style.fontSize = '0.8rem';
+        editBtn.textContent = 'Modifier ✏️';
+        editBtn.onclick = () => editBOCourse(course.id);
+        actionsTd.appendChild(editBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-outline';
+        deleteBtn.style.padding = '0.35rem 0.7rem';
+        deleteBtn.style.fontSize = '0.8rem';
+        deleteBtn.style.borderColor = 'var(--danger)';
+        deleteBtn.style.color = 'var(--danger)';
+        deleteBtn.textContent = 'Supprimer 🗑️';
+        deleteBtn.onclick = () => deleteBOCourse(course.id, course.title);
+        actionsTd.appendChild(deleteBtn);
+
+        row.appendChild(actionsTd);
+        listContainer.appendChild(row);
+    });
+}
+window.renderBOCourses = renderBOCourses;
+
+async function deleteBOCourse(courseId, title) {
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer le cours "${title}" ?\nCette action le retirera du catalogue.`)) {
+        return;
+    }
+
+    store.deleteCourse(courseId);
+    alert("Cours supprimé avec succès !");
+    await updateBOStats();
+    renderBOCourses();
+    renderCatalog();
+}
+window.deleteBOCourse = deleteBOCourse;
+
+function openCreateCourseTab() {
+    const tabBuilder = document.getElementById('tab-bo-builder');
+    if (tabBuilder) tabBuilder.click();
+}
+window.openCreateCourseTab = openCreateCourseTab;
+
+function editBOCourse(courseId) {
+    const course = store.getCourses().find(c => c.id === courseId);
+    if (!course) {
+        alert("Cours introuvable.");
+        return;
+    }
+    loadCourseInBuilder(course);
+}
+window.editBOCourse = editBOCourse;
+
+function loadCourseInBuilder(course) {
+    const tabBuilder = document.getElementById('tab-bo-builder');
+    if (tabBuilder) tabBuilder.click();
+    
+    const builderTitle = document.getElementById('bo-builder-title');
+    if (builderTitle) builderTitle.textContent = "Modifier la formation";
+    
+    const submitBtn = document.getElementById('btn-builder-submit');
+    if (submitBtn) submitBtn.textContent = "Enregistrer les modifications";
+    
+    document.getElementById('builder-course-title').value = course.title;
+    const idInput = document.getElementById('builder-course-id');
+    idInput.value = course.id;
+    idInput.disabled = true;
+    
+    document.getElementById('builder-course-duration').value = course.duration || '';
+    document.getElementById('builder-course-level').value = course.level || 'medium';
+    document.getElementById('builder-course-desc').value = course.description || '';
+    document.getElementById('builder-course-image').value = course.cover || '';
+    
+    const modulesList = document.getElementById('builder-modules-list');
+    modulesList.innerHTML = '';
+    builderModulesCount = 0;
+    
+    course.modules.forEach(m => {
+        builderModulesCount++;
+        const moduleId = `bo-mod-${Date.now()}-${builderModulesCount}`;
+        
+        const moduleDiv = document.createElement('div');
+        moduleDiv.className = 'card bo-builder-module-card';
+        moduleDiv.style.borderLeft = '4px solid var(--accent)';
+        moduleDiv.style.padding = '1.25rem';
+        moduleDiv.style.position = 'relative';
+        moduleDiv.setAttribute('data-module-id', moduleId);
+        
+        moduleDiv.innerHTML = `
+            <button type="button" class="btn btn-outline" style="position: absolute; top: 1rem; right: 1rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; border-color: var(--danger); color: var(--danger);" onclick="this.closest('.bo-builder-module-card').remove()">Supprimer</button>
+            <div style="margin-bottom: 1rem; max-width: 80%;">
+                <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Titre du Module</label>
+                <input type="text" class="module-title-input" placeholder="Ex: Module 1 : Introduction" required value="${m.title.replace(/"/g, '&quot;')}" style="width: 100%; padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+            </div>
+
+            <div style="padding-left: 1.5rem; border-left: 2px dashed var(--border-color);">
+                <h5 style="font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+                    Chapitres & Leçons
+                    <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="window.addBuilderChapter('${moduleId}')">+ Ajouter un Chapitre</button>
+                </h5>
+                <div class="chapters-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Chapters loaded here -->
+                </div>
+            </div>
+        `;
+        modulesList.appendChild(moduleDiv);
+        
+        const chaptersContainer = moduleDiv.querySelector('.chapters-container');
+        
+        m.chapters.forEach(ch => {
+            const chapterId = `bo-chap-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
+            const chapterDiv = document.createElement('div');
+            chapterDiv.className = 'bo-builder-chapter-card';
+            chapterDiv.style.background = 'rgba(255,255,255,0.02)';
+            chapterDiv.style.border = '1px solid var(--border-color)';
+            chapterDiv.style.borderRadius = 'var(--radius-sm)';
+            chapterDiv.style.padding = '1rem';
+            chapterDiv.style.position = 'relative';
+            chapterDiv.setAttribute('data-chapter-id', chapterId);
+            
+            chapterDiv.innerHTML = `
+                <button type="button" class="btn btn-outline" style="position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.15rem 0.35rem; font-size: 0.7rem; border-color: var(--danger); color: var(--danger);" onclick="this.closest('.bo-builder-chapter-card').remove()">Retirer</button>
+                <div style="margin-bottom: 0.75rem; max-width: 80%;">
+                    <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Titre du Chapitre</label>
+                    <input type="text" class="chapter-title-input" placeholder="Ex: Chapitre 1 : Premier Pas" required value="${ch.title.replace(/"/g, '&quot;')}" style="width: 100%; padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+                </div>
+
+                <div style="padding-left: 1rem; border-left: 1.5px dotted var(--border-color);">
+                    <h6 style="font-size: 0.85rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        Leçons
+                        <button type="button" class="btn btn-outline" style="padding: 0.15rem 0.35rem; font-size: 0.7rem;" onclick="window.addBuilderLesson('${chapterId}')">+ Leçon</button>
+                    </h6>
+                    <div class="lessons-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <!-- Lessons appended here -->
+                    </div>
+                </div>
+            `;
+            chaptersContainer.appendChild(chapterDiv);
+            
+            const lessonsContainer = chapterDiv.querySelector('.lessons-container');
+            
+            ch.lessons.forEach(l => {
+                const lessonId = `bo-lesson-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
+                const lessonDiv = document.createElement('div');
+                lessonDiv.className = 'bo-builder-lesson-row';
+                lessonDiv.style.display = 'flex';
+                lessonDiv.style.flexDirection = 'column';
+                lessonDiv.style.gap = '0.5rem';
+                lessonDiv.style.padding = '0.75rem';
+                lessonDiv.style.background = 'rgba(0,0,0,0.2)';
+                lessonDiv.style.border = '1px solid var(--border-color)';
+                lessonDiv.style.borderRadius = 'var(--radius-sm)';
+                lessonDiv.setAttribute('data-lesson-id', lessonId);
+                
+                const isExercise = l.type === 'exercise';
+                const isVideo = l.type === 'video';
+                
+                let contentVal = l.content || '';
+                if (isVideo && l.videoUrl) {
+                    contentVal = l.videoUrl;
+                }
+                
+                const starterCode = (l.exercise && l.exercise.starterCode) || '';
+                const regexVal = (l.exercise && l.exercise.validationRegex) || '';
+                const hintVal = (l.exercise && l.exercise.hint) || '';
+                
+                lessonDiv.innerHTML = `
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <div style="flex-grow: 1;">
+                            <label style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem;">Titre de la Leçon</label>
+                            <input type="text" class="lesson-title-input" placeholder="Ex: 1. Présentation générale" required value="${l.title.replace(/"/g, '&quot;')}" style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+                        </div>
+                        <div style="width: 120px;">
+                            <label style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem;">Type</label>
+                            <select class="lesson-type-select" onchange="window.handleBuilderLessonTypeChange('${lessonId}')" style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #1a1b24; color: #fff;">
+                                <option value="document" ${l.type === 'document' ? 'selected' : ''}>Texte / Cours</option>
+                                <option value="video" ${l.type === 'video' ? 'selected' : ''}>Vidéo YouTube</option>
+                                <option value="exercise" ${l.type === 'exercise' ? 'selected' : ''}>Pratique (Code)</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-outline" style="align-self: flex-end; padding: 0.4rem 0.5rem; font-size: 0.75rem; border-color: var(--danger); color: var(--danger);" onclick="this.closest('.bo-builder-lesson-row').remove()">✖</button>
+                    </div>
+
+                    <!-- Text / Video Content Area -->
+                    <div class="lesson-content-group" style="display: ${isExercise ? 'none' : 'block'};">
+                        <label style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem;">Contenu (Texte Markdown ou URL intégration YouTube)</label>
+                        <textarea class="lesson-text-content" rows="2" placeholder="${isVideo ? 'Ex: https://www.youtube.com/embed/...' : 'Rédigez le cours ici...'}" style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff; resize: vertical;">${contentVal}</textarea>
+                    </div>
+
+                    <!-- Practice Exercise Area -->
+                    <div class="lesson-exercise-group" style="display: ${isExercise ? 'flex' : 'none'}; flex-direction: column; gap: 0.4rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem;">Code de départ (JS)</label>
+                            <textarea class="lesson-exercise-code" rows="2" placeholder="// Écrivez votre code de départ ici..." style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff; font-family: monospace;">${starterCode}</textarea>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem;">Regex de validation (JS)</label>
+                                <input type="text" class="lesson-exercise-regex" placeholder="Ex: return\\s+true" value="${regexVal.replace(/"/g, '&quot;')}" style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem;">Indice d'aide</label>
+                                <input type="text" class="lesson-exercise-hint" placeholder="Ex: Utilisez le mot-clé return..." value="${hintVal.replace(/"/g, '&quot;')}" style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                lessonsContainer.appendChild(lessonDiv);
+            });
+        });
+    });
+}
+window.loadCourseInBuilder = loadCourseInBuilder;
 

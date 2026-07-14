@@ -186,14 +186,48 @@ class Store {
     }
 
     getCourses() {
-        return [...COURSES, ...(this.state.customCourses || [])];
+        if (!this.state.deletedCourseIds) {
+            this.state.deletedCourseIds = [];
+        }
+        if (!this.state.customCourses) {
+            this.state.customCourses = [];
+        }
+        const preloaded = COURSES.filter(c => 
+            !this.state.customCourses.some(cc => cc.id === c.id) &&
+            !this.state.deletedCourseIds.includes(c.id)
+        );
+        const customs = this.state.customCourses.filter(cc => 
+            !this.state.deletedCourseIds.includes(cc.id)
+        );
+        return [...preloaded, ...customs];
     }
 
     addCourse(course) {
         if (!this.state.customCourses) {
             this.state.customCourses = [];
         }
-        this.state.customCourses.push(course);
+        if (this.state.deletedCourseIds) {
+            this.state.deletedCourseIds = this.state.deletedCourseIds.filter(id => id !== course.id);
+        }
+        const idx = this.state.customCourses.findIndex(cc => cc.id === course.id);
+        if (idx !== -1) {
+            this.state.customCourses[idx] = course;
+        } else {
+            this.state.customCourses.push(course);
+        }
+        this.save();
+    }
+
+    deleteCourse(courseId) {
+        if (!this.state.deletedCourseIds) {
+            this.state.deletedCourseIds = [];
+        }
+        if (!this.state.deletedCourseIds.includes(courseId)) {
+            this.state.deletedCourseIds.push(courseId);
+        }
+        if (this.state.customCourses) {
+            this.state.customCourses = this.state.customCourses.filter(cc => cc.id !== courseId);
+        }
         this.save();
     }
 
@@ -587,6 +621,7 @@ class Store {
                     name: profile.name,
                     email: profile.email,
                     role: profile.role,
+                    hasPaid: profile.has_paid,
                     courses: studentCoursesProgress
                 });
             }
@@ -596,6 +631,60 @@ class Store {
             console.error("Failed to load real student data:", e);
             return this.getMockStudentsData();
         }
+    }
+
+    async createBOUser(name, email, password, role, hasPaid) {
+        if (!supabaseClient) {
+            alert("Mode hors-ligne : Création simulée localement.");
+            return;
+        }
+        const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    name: name,
+                    role: role
+                }
+            }
+        });
+        if (error) throw error;
+
+        if (hasPaid && data.user) {
+            const { error: updateErr } = await supabaseClient
+                .from('profiles')
+                .update({ has_paid: true })
+                .eq('id', data.user.id);
+            if (updateErr) console.error("Error setting initial payment status:", updateErr);
+        }
+    }
+
+    async updateBOUser(userId, name, role, hasPaid) {
+        if (!supabaseClient) {
+            alert("Mode hors-ligne : Modification simulée localement.");
+            return;
+        }
+        const { error } = await supabaseClient
+            .from('profiles')
+            .update({
+                name: name,
+                role: role,
+                has_paid: hasPaid
+            })
+            .eq('id', userId);
+        if (error) throw error;
+    }
+
+    async deleteBOUser(userId) {
+        if (!supabaseClient) {
+            alert("Mode hors-ligne : Suppression simulée localement.");
+            return;
+        }
+        const { error } = await supabaseClient
+            .from('profiles')
+            .delete()
+            .eq('id', userId);
+        if (error) throw error;
     }
 }
 
