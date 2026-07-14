@@ -746,23 +746,31 @@ function renderCarouselItems() {
         const card = document.createElement('div');
         card.className = "card carousel-card";
         card.style.background = `linear-gradient(135deg, hsla(252, 80%, 30%, 0.15), var(--bg-card))`;
+        
+        const coverImg = course.cover || ('assets/' + course.id.replace(/-/g, '_') + '_cover.jpg');
+
         card.innerHTML = `
-            <div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">Recommandé</span>
-                    ${store.getCurrentUser() && store.getCurrentUser().role === 'Étudiant' ? (
-                        store.hasPaid() ? 
-                        `<span style="font-size: 0.7rem; font-weight: 700; color: #25d366;">🔓 Débloqué</span>` : 
-                        `<span style="font-size: 0.7rem; font-weight: 700; color: #ff9800;">🔒 Payant</span>`
-                    ) : ''}
-                </div>
-                <h4 style="font-size: 1rem; margin-top: 0.4rem; line-height: 1.3;">${course.title}</h4>
+            <div class="carousel-thumbnail" style="height: 100px; border-radius: var(--radius-sm); margin-bottom: 0.75rem; overflow: hidden; border: 1px solid var(--border-color);">
+                <img src="${coverImg}" alt="${course.title}" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
-                <span style="font-size: 0.75rem; color: var(--text-dim);">⏱️ ${course.duration}</span>
-                <button class="btn btn-primary start-carousel-btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; box-shadow: none;">
-                    Découvrir
-                </button>
+            <div style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">Recommandé</span>
+                        ${store.getCurrentUser() && store.getCurrentUser().role === 'Étudiant' ? (
+                            store.hasPaid() ? 
+                            `<span style="font-size: 0.7rem; font-weight: 700; color: #25d366;">🔓 Débloqué</span>` : 
+                            `<span style="font-size: 0.7rem; font-weight: 700; color: #ff9800;">🔒 Payant</span>`
+                        ) : ''}
+                    </div>
+                    <h4 style="font-size: 0.9rem; margin-top: 0; line-height: 1.3; font-weight: 600; color: var(--text-main); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.6em;">${course.title}</h4>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                    <span style="font-size: 0.75rem; color: var(--text-dim);">⏱️ ${course.duration}</span>
+                    <button class="btn btn-primary start-carousel-btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; box-shadow: none;">
+                        Découvrir
+                    </button>
+                </div>
             </div>
         `;
 

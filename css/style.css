@@ -598,8 +598,8 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 180px;
-    padding: 1.2rem;
+    height: 260px;
+    padding: 1rem;
     border-radius: var(--radius-md);
 }
 
