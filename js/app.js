@@ -542,12 +542,17 @@ function renderDashboard() {
         }
     }
 
+    // Filter visible courses for dashboard stats and display
+    const coursesList = (user && user.role === 'Étudiant') 
+        ? store.getCourses().filter(c => (user.eligibleCourses || []).includes(c.id))
+        : store.getCourses();
+
     // Compute Statistics
     let startedCount = 0;
     let completedCount = 0;
     let completedLessonsCount = 0;
 
-    store.getCourses().forEach(course => {
+    coursesList.forEach(course => {
         const p = store.getCourseState(course.id);
         if (p) {
             if (p.completedLessons.length > 0) startedCount++;
@@ -566,7 +571,7 @@ function renderDashboard() {
     activeContainer.innerHTML = '';
 
     let hasActive = false;
-    store.getCourses().forEach(course => {
+    coursesList.forEach(course => {
         const p = store.getCourseState(course.id);
         if (p && p.completedLessons.length > 0 && !p.completed) {
             hasActive = true;
@@ -723,7 +728,14 @@ function filterCatalogCourses(filterText) {
     const container = document.getElementById('catalog-courses-container');
     container.innerHTML = '';
 
-    const filtered = store.getCourses().filter(c => 
+    const currentUser = store.getCurrentUser();
+    let coursesList = store.getCourses();
+    if (currentUser && currentUser.role === 'Étudiant') {
+        const eligibleIds = currentUser.eligibleCourses || [];
+        coursesList = coursesList.filter(c => eligibleIds.includes(c.id));
+    }
+
+    const filtered = coursesList.filter(c => 
         c.title.toLowerCase().includes(filterText) || 
         c.description.toLowerCase().includes(filterText)
     );
@@ -750,7 +762,7 @@ function filterCatalogCourses(filterText) {
             }
         }
 
-        const coverImg = 'assets/' + course.id.replace(/-/g, '_') + '_cover.jpg';
+        const coverImg = course.cover || ('assets/' + course.id.replace(/-/g, '_') + '_cover.jpg');
 
         const card = document.createElement('div');
         card.className = "card course-card";
@@ -2166,6 +2178,31 @@ window.finalizeSuccessPayment = finalizeSuccessPayment;
 
 // --- USER CRUD FUNCTIONS ---
 
+function renderBOUserCoursesChecklist(selectedIds = []) {
+    const container = document.getElementById('bo-crud-user-courses-list');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    const courses = store.getCourses();
+    courses.forEach(c => {
+        const label = document.createElement('label');
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.gap = '0.5rem';
+        label.style.fontSize = '0.85rem';
+        label.style.cursor = 'pointer';
+        label.style.color = '#fff';
+        
+        const isChecked = selectedIds.includes(c.id) ? 'checked' : '';
+        
+        label.innerHTML = `
+            <input type="checkbox" class="bo-crud-user-course-checkbox" value="${c.id}" ${isChecked} style="width:16px; height:16px; cursor:pointer;">
+            <span>${c.title}</span>
+        `;
+        container.appendChild(label);
+    });
+}
+
 function openCreateUserModal() {
     document.getElementById('bo-user-modal-title').textContent = "Créer un utilisateur";
     document.getElementById('bo-crud-user-id').value = "";
@@ -2176,6 +2213,10 @@ function openCreateUserModal() {
     document.getElementById('bo-crud-user-password').setAttribute('required', 'required');
     document.getElementById('bo-crud-user-role').value = "Étudiant";
     document.getElementById('bo-crud-user-paid').checked = false;
+    
+    // Default: select all courses for new students, admin can deselect
+    renderBOUserCoursesChecklist(store.getCourses().map(c => c.id));
+    
     document.getElementById('bo-user-crud-modal').style.display = "flex";
 }
 window.openCreateUserModal = openCreateUserModal;
@@ -2190,6 +2231,10 @@ function openEditUserModal(student) {
     document.getElementById('bo-crud-user-password').removeAttribute('required');
     document.getElementById('bo-crud-user-role').value = student.role || "Étudiant";
     document.getElementById('bo-crud-user-paid').checked = student.hasPaid === true;
+    
+    // Select student's active/eligible courses
+    renderBOUserCoursesChecklist(student.eligibleCourses || []);
+    
     document.getElementById('bo-user-crud-modal').style.display = "flex";
 }
 window.openEditUserModal = openEditUserModal;
@@ -2206,9 +2251,13 @@ async function saveBOUser() {
     const role = document.getElementById('bo-crud-user-role').value;
     const hasPaid = document.getElementById('bo-crud-user-paid').checked;
 
+    // Collect checked eligible courses
+    const checkedCheckboxes = document.querySelectorAll('.bo-crud-user-course-checkbox:checked');
+    const eligibleCourses = Array.from(checkedCheckboxes).map(cb => cb.value);
+
     try {
         if (id) {
-            await store.updateBOUser(id, name, role, hasPaid);
+            await store.updateBOUser(id, name, role, hasPaid, eligibleCourses);
             alert("Utilisateur mis à jour avec succès !");
         } else {
             const password = document.getElementById('bo-crud-user-password').value;
@@ -2216,7 +2265,7 @@ async function saveBOUser() {
                 alert("Veuillez saisir un mot de passe d'au moins 6 caractères.");
                 return;
             }
-            await store.createBOUser(name, email, password, role, hasPaid);
+            await store.createBOUser(name, email, password, role, hasPaid, eligibleCourses);
             alert("Nouvel utilisateur créé avec succès !");
         }
         closeBOUserModal();
@@ -2503,4 +2552,15 @@ function loadCourseInBuilder(course) {
     });
 }
 window.loadCourseInBuilder = loadCourseInBuilder;
+
+function handleBuilderImageUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('builder-course-image').value = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+window.handleBuilderImageUpload = handleBuilderImageUpload;
 

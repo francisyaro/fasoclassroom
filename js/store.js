@@ -72,7 +72,8 @@ class Store {
                     email: sbUser.email,
                     name: sbUser.email.split('@')[0],
                     role: 'Étudiant',
-                    has_paid: false
+                    has_paid: false,
+                    eligible_courses: this.getCourses().map(c => c.id)
                 };
                 await supabaseClient.from('profiles').insert(profile);
             }
@@ -82,7 +83,8 @@ class Store {
                 name: profile.name,
                 email: profile.email,
                 role: profile.role,
-                hasPaid: profile.has_paid
+                hasPaid: profile.has_paid,
+                eligibleCourses: profile.eligible_courses || []
             };
             
             // 2. Fetch Progress Details
@@ -622,6 +624,7 @@ class Store {
                     email: profile.email,
                     role: profile.role,
                     hasPaid: profile.has_paid,
+                    eligibleCourses: profile.eligible_courses || [],
                     courses: studentCoursesProgress
                 });
             }
@@ -633,7 +636,7 @@ class Store {
         }
     }
 
-    async createBOUser(name, email, password, role, hasPaid) {
+    async createBOUser(name, email, password, role, hasPaid, eligibleCourses) {
         if (!supabaseClient) {
             alert("Mode hors-ligne : Création simulée localement.");
             return;
@@ -650,16 +653,19 @@ class Store {
         });
         if (error) throw error;
 
-        if (hasPaid && data.user) {
+        if (data.user) {
             const { error: updateErr } = await supabaseClient
                 .from('profiles')
-                .update({ has_paid: true })
+                .update({ 
+                    has_paid: hasPaid,
+                    eligible_courses: eligibleCourses
+                })
                 .eq('id', data.user.id);
-            if (updateErr) console.error("Error setting initial payment status:", updateErr);
+            if (updateErr) console.error("Error setting initial profile metadata:", updateErr);
         }
     }
 
-    async updateBOUser(userId, name, role, hasPaid) {
+    async updateBOUser(userId, name, role, hasPaid, eligibleCourses) {
         if (!supabaseClient) {
             alert("Mode hors-ligne : Modification simulée localement.");
             return;
@@ -669,7 +675,8 @@ class Store {
             .update({
                 name: name,
                 role: role,
-                has_paid: hasPaid
+                has_paid: hasPaid,
+                eligible_courses: eligibleCourses
             })
             .eq('id', userId);
         if (error) throw error;
