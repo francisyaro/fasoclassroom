@@ -196,7 +196,8 @@
                             <input type="password" id="auth-password" placeholder="••••••••" required>
                         </div>
                         <button class="btn btn-primary" id="btn-auth-login-submit" onclick="handleAuthLoginWithPassword()" style="background: #5C2D91; border-color: #5C2D91; width: 100%; padding: 0.75rem; margin-bottom: 0.5rem;">Se connecter</button>
-                        <button class="btn btn-outline" onclick="showAuthEmailStep()" style="width: 100%; padding: 0.75rem;">Retour</button>
+                        <button class="btn btn-outline" onclick="showAuthEmailStep()" style="width: 100%; padding: 0.75rem; margin-bottom: 0.5rem;">Retour</button>
+                        <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Pas encore inscrit ? <a href="#" onclick="switchAuthStep('register')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Créer un compte</a></p>
                     </div>
 
                     <!-- Form step 2: New account details (Hidden by default) -->
@@ -217,7 +218,8 @@
                             </select>
                         </div>
                         <button class="btn btn-primary" id="btn-auth-register-submit" onclick="handleAuthRegister()" style="background: #5C2D91; border-color: #5C2D91; width: 100%; padding: 0.75rem; margin-bottom: 0.5rem;">S'inscrire et se connecter</button>
-                        <button class="btn btn-outline" onclick="showAuthEmailStep()" style="width: 100%; padding: 0.75rem;">Retour</button>
+                        <button class="btn btn-outline" onclick="showAuthEmailStep()" style="width: 100%; padding: 0.75rem; margin-bottom: 0.5rem;">Retour</button>
+                        <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Déjà inscrit ? <a href="#" onclick="switchAuthStep('login')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Se connecter</a></p>
                     </div>
 
                     <div class="auth-divider">
@@ -2853,6 +2855,27 @@ function showAuthEmailStep() {
     document.getElementById('auth-subtitle').textContent = "Connexion ou création de compte en 1 minute";
 }
 window.showAuthEmailStep = showAuthEmailStep;
+
+function switchAuthStep(step) {
+    document.getElementById('auth-step-email').style.display = 'none';
+    document.getElementById('auth-step-password').style.display = 'none';
+    document.getElementById('auth-step-register').style.display = 'none';
+    
+    if (step === 'email') {
+        document.getElementById('auth-step-email').style.display = 'block';
+        document.getElementById('auth-title').textContent = "Bienvenue";
+        document.getElementById('auth-subtitle').textContent = "Connexion ou création de compte en 1 minute";
+    } else if (step === 'login') {
+        document.getElementById('auth-step-password').style.display = 'block';
+        document.getElementById('auth-title').textContent = "Connexion";
+        document.getElementById('auth-subtitle').textContent = "Saisissez votre mot de passe pour vous connecter";
+    } else if (step === 'register') {
+        document.getElementById('auth-step-register').style.display = 'block';
+        document.getElementById('auth-title').textContent = "Créer un compte";
+        document.getElementById('auth-subtitle').textContent = "Définissez vos informations de connexion";
+    }
+}
+window.switchAuthStep = switchAuthStep;
 
 async function handleAuthEmail() {
     const emailInput = document.getElementById('auth-email');

@@ -296,6 +296,27 @@ function showAuthEmailStep() {
 }
 window.showAuthEmailStep = showAuthEmailStep;
 
+function switchAuthStep(step) {
+    document.getElementById('auth-step-email').style.display = 'none';
+    document.getElementById('auth-step-password').style.display = 'none';
+    document.getElementById('auth-step-register').style.display = 'none';
+    
+    if (step === 'email') {
+        document.getElementById('auth-step-email').style.display = 'block';
+        document.getElementById('auth-title').textContent = "Bienvenue";
+        document.getElementById('auth-subtitle').textContent = "Connexion ou création de compte en 1 minute";
+    } else if (step === 'login') {
+        document.getElementById('auth-step-password').style.display = 'block';
+        document.getElementById('auth-title').textContent = "Connexion";
+        document.getElementById('auth-subtitle').textContent = "Saisissez votre mot de passe pour vous connecter";
+    } else if (step === 'register') {
+        document.getElementById('auth-step-register').style.display = 'block';
+        document.getElementById('auth-title').textContent = "Créer un compte";
+        document.getElementById('auth-subtitle').textContent = "Définissez vos informations de connexion";
+    }
+}
+window.switchAuthStep = switchAuthStep;
+
 async function handleAuthEmail() {
     const emailInput = document.getElementById('auth-email');
     const email = emailInput.value.trim();
