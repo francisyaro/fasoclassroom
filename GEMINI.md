@@ -52,7 +52,7 @@ fasoclassroom/
 *   **En-tête intelligent** : Si une session est active, le bouton *Connexion* devient un message de bienvenue personnalisé (`Bonjour, [Nom]`) avec un raccourci d'accès direct vers le tableau de bord (*Mon espace*).
 
 ### B. Authentification Split-Screen & Sécurisée (Supabase Auth)
-*   **Double colonne** : Gauche blanche épurée (formulaire), Droite orange ambrée (`#FFAF1D`) contenant le témoignage et le portrait d'Anthony.
+*   **Double colonne** : Gauche blanche épurée (formulaire), Droite dégradée violet/bleu (charte Fasoweb) contenant le témoignage et le portrait d'Anthony.
 *   **Correction de mise en page** : Utilisation d'un flex-layout vertical prévenant tout chevauchement du texte par l'image, et application de la règle `mix-blend-mode: multiply` sur l'image d'Anthony pour éliminer son fond blanc et la fondre de manière native sur l'arrière-plan orange.
 *   **Formulaire interactif sécurisé en 3 étapes** : 
     1.  **Saisie d'e-mail** : L'élève saisit son e-mail. Une vérification asynchrone est faite en direct sur la base de profils.

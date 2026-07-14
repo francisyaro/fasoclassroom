@@ -432,7 +432,7 @@ function updateUserUI() {
             landingAuthContainer.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     <span style="font-size: 0.9rem; font-weight: 600; color: #1e1e1c;">Bonjour, ${user.name}</span>
-                    <button class="btn btn-primary" onclick="showAppShell()" style="background: #7451EB; border-color: #7451EB; font-size: 0.85rem; padding: 0.5rem 1rem;">Mon espace</button>
+                    <button class="btn btn-primary" onclick="showAppShell()" style="background: #5C2D91; border-color: #5C2D91; font-size: 0.85rem; padding: 0.5rem 1rem;">Mon espace</button>
                 </div>
             `;
         }
@@ -459,7 +459,7 @@ function updateUserUI() {
         // Restore landing page header connection button
         if (landingAuthContainer) {
             landingAuthContainer.innerHTML = `
-                <button class="btn btn-outline" onclick="showAuthPage()" style="border-color: #7451EB; color: #7451EB; font-size: 0.85rem; padding: 0.5rem 1rem;">Connexion</button>
+                <button class="btn btn-outline" onclick="showAuthPage()" style="border-color: #5C2D91; color: #5C2D91; font-size: 0.85rem; padding: 0.5rem 1rem;">Connexion</button>
             `;
         }
         
@@ -507,8 +507,8 @@ function renderDashboard() {
         if (actionBtn) {
             actionBtn.textContent = "Finaliser et Payer (15 000 FCFA)";
             actionBtn.disabled = false;
-            actionBtn.style.background = '#7451EB';
-            actionBtn.style.borderColor = '#7451EB';
+            actionBtn.style.background = '#5C2D91';
+            actionBtn.style.borderColor = '#5C2D91';
             actionBtn.onclick = () => openCheckoutModal();
         }
     }
