@@ -715,6 +715,11 @@
                                         <textarea id="builder-course-desc" rows="3" placeholder="Présentez les objectifs de la formation..." required style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff; resize: vertical;"></textarea>
                                     </div>
 
+                                    <div class="form-group" style="margin-bottom: 2rem;">
+                                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Illustration du cours (Image URL / optionnelle)</label>
+                                        <input type="text" id="builder-course-image" placeholder="Ex: https://images.unsplash.com/... ou laissez vide pour utiliser l'illustration générique" style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff;">
+                                    </div>
+
                                     <!-- Modules list container -->
                                     <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-bottom: 1.5rem;">
                                         <h4 style="font-size: 1.1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
@@ -4397,6 +4402,7 @@ function saveNewCourse() {
     const duration = document.getElementById('builder-course-duration').value.trim();
     const level = document.getElementById('builder-course-level').value;
     const desc = document.getElementById('builder-course-desc').value.trim();
+    const cover = document.getElementById('builder-course-image').value.trim() || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=60';
 
     // Check if ID is clean
     if (!/^[a-z0-9\-]+$/.test(id)) {
@@ -4528,7 +4534,8 @@ function saveNewCourse() {
         levelText: level === 'easy' ? 'Débutant' : (level === 'medium' ? 'Intermédiaire' : 'Avancé'),
         lessonsCount: lessonIndex - 1,
         modules: modules,
-        exam: examObj
+        exam: examObj,
+        cover: cover
     };
 
     // Save in Store

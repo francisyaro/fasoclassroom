@@ -1837,6 +1837,7 @@ function saveNewCourse() {
     const duration = document.getElementById('builder-course-duration').value.trim();
     const level = document.getElementById('builder-course-level').value;
     const desc = document.getElementById('builder-course-desc').value.trim();
+    const cover = document.getElementById('builder-course-image').value.trim() || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=60';
 
     // Check if ID is clean
     if (!/^[a-z0-9\-]+$/.test(id)) {
@@ -1968,7 +1969,8 @@ function saveNewCourse() {
         levelText: level === 'easy' ? 'Débutant' : (level === 'medium' ? 'Intermédiaire' : 'Avancé'),
         lessonsCount: lessonIndex - 1,
         modules: modules,
-        exam: examObj
+        exam: examObj,
+        cover: cover
     };
 
     // Save in Store
