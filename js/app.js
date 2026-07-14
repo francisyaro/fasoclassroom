@@ -1969,11 +1969,14 @@ function saveNewCourse() {
         return;
     }
 
-    // Verify unique id
-    const existing = store.getCourses().find(c => c.id === id);
-    if (existing) {
-        alert("Un cours avec cet identifiant existe déjà. Choisissez un autre identifiant.");
-        return;
+    // Verify unique id (only when creating a new course)
+    const isEditMode = document.getElementById('builder-course-id').disabled;
+    if (!isEditMode) {
+        const existing = store.getCourses().find(c => c.id === id);
+        if (existing) {
+            alert("Un cours avec cet identifiant existe déjà. Choisissez un autre identifiant.");
+            return;
+        }
     }
 
     // Retrieve modules
@@ -2101,10 +2104,19 @@ function saveNewCourse() {
     store.addCourse(newCourse);
     
     // Success feedback
-    alert(`Félicitations ! Le cours "${title}" a été créé avec succès et est accessible dans le catalogue !`);
+    if (isEditMode) {
+        alert(`Félicitations ! Le cours "${title}" a été mis à jour avec succès !`);
+    } else {
+        alert(`Félicitations ! Le cours "${title}" a été créé avec succès et est accessible dans le catalogue !`);
+    }
     
-    // Redirect to backoffice home
-    document.getElementById('tab-bo-students').click();
+    // Redirect to backoffice courses management tab
+    const tabCourses = document.getElementById('tab-bo-courses');
+    if (tabCourses) {
+        tabCourses.click();
+    } else {
+        document.getElementById('tab-bo-students').click();
+    }
 }
 
 // Make builder actions globally reachable
