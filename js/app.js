@@ -865,6 +865,19 @@ function filterCatalogCourses(filterText) {
 // PAGE 3: COURSE PLAYER & STICKY BOTTOM BAR
 // ==========================================
 function startCourse(courseId) {
+    const user = store.getCurrentUser();
+    if (!user) {
+        alert("Veuillez vous connecter pour commencer ce cours.");
+        navigateTo('login');
+        return;
+    }
+
+    if (user.role === 'Étudiant' && !store.hasPaid()) {
+        alert("Frais de formation requis : Vous devez finaliser votre dossier d'inscription et valider votre paiement (15 000 FCFA) avant de pouvoir démarrer cette formation.");
+        openCheckoutModal();
+        return;
+    }
+
     activeCourse = store.getCourses().find(c => c.id === courseId);
     if (!activeCourse) return;
 
