@@ -3287,7 +3287,7 @@ function filterCatalogCourses(filterText) {
             }
         }
 
-        const coverImg = 'assets/' + course.id.replace('-', '_') + '_cover.jpg';
+        const coverImg = 'assets/' + course.id.replace(/-/g, '_') + '_cover.jpg';
 
         const card = document.createElement('div');
         card.className = "card course-card";
