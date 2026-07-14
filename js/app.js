@@ -2304,16 +2304,23 @@ function renderBOUserCoursesChecklist(selectedIds = []) {
         const label = document.createElement('label');
         label.style.display = 'flex';
         label.style.alignItems = 'center';
-        label.style.gap = '0.5rem';
-        label.style.fontSize = '0.85rem';
+        label.style.gap = '0.75rem';
+        label.style.fontSize = '0.9rem';
         label.style.cursor = 'pointer';
-        label.style.color = '#fff';
+        label.style.color = 'var(--text-main)';
+        label.style.padding = '0.5rem 0.75rem';
+        label.style.borderRadius = 'var(--radius-sm)';
+        label.style.transition = 'background-color 0.2s';
+        
+        // Add a clean hover effect
+        label.onmouseover = () => { label.style.backgroundColor = 'var(--border-glow)'; };
+        label.onmouseout = () => { label.style.backgroundColor = 'transparent'; };
         
         const isChecked = selectedIds.includes(c.id) ? 'checked' : '';
         
         label.innerHTML = `
-            <input type="checkbox" class="bo-crud-user-course-checkbox" value="${c.id}" ${isChecked} style="width:16px; height:16px; cursor:pointer;">
-            <span>${c.title}</span>
+            <input type="checkbox" class="bo-crud-user-course-checkbox" value="${c.id}" ${isChecked} style="width: 18px; height: 18px; cursor: pointer; accent-color: #5C2D91; flex-shrink: 0;">
+            <span style="font-weight: 500; line-height: 1.3;">${c.title}</span>
         `;
         container.appendChild(label);
     });
