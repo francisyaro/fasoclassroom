@@ -39,8 +39,8 @@
     <div id="landing-container" style="display: block;">
         <!-- Header -->
         <header class="landing-header">
-            <div class="landing-logo">
-                Faso<span style="color: #5C2D91; font-weight: 800;">classroom</span>
+            <div class="landing-logo" style="text-transform: lowercase; font-weight: 800;">
+                <span style="color: #5C2D91;">faso</span><span style="color: #1085C5;">classroom</span>
             </div>
             <nav class="landing-nav-links">
                 <a class="landing-nav-link" onclick="scrollToSection('landing-hero')">Accueil</a>
@@ -172,8 +172,8 @@
         <div class="auth-split-wrapper">
             <!-- Left Panel (Login form) -->
             <div class="auth-left-panel">
-                <div class="landing-logo" style="cursor: pointer;" onclick="showLandingPage()">
-                    Faso<span style="color: #5C2D91; font-weight: 800;">classroom</span>
+                <div class="landing-logo" style="cursor: pointer; text-transform: lowercase; font-weight: 800;" onclick="showLandingPage()">
+                    <span style="color: #5C2D91;">faso</span><span style="color: #1085C5;">classroom</span>
                 </div>
                 
                 <div class="auth-form-container">
@@ -268,8 +268,8 @@
              ========================================== -->
         <aside class="main-sidebar" id="main-sidebar">
             <div class="sidebar-logo">
-                <div class="log✖icon">⚡</div>
-                <div class="log✖text">Faso<span>classroom</span></div>
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">faso<span>classroom</span></div>
             </div>
 
             <nav class="sidebar-nav">
@@ -2042,7 +2042,7 @@ function initApp() {
 // THEME & STYLING
 // ==========================================
 function setupTheme() {
-    const savedTheme = localStorage.getItem('fasoclassroom_theme') || 'dark';
+    const savedTheme = localStorage.getItem('fasoclassroom_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeIcon(savedTheme);
 

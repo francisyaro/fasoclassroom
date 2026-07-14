@@ -89,7 +89,7 @@ function initApp() {
 // THEME & STYLING
 // ==========================================
 function setupTheme() {
-    const savedTheme = localStorage.getItem('fasoclassroom_theme') || 'dark';
+    const savedTheme = localStorage.getItem('fasoclassroom_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeIcon(savedTheme);
 

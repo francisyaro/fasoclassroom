@@ -44,16 +44,16 @@
 
 /* Light Theme overrides (OpenClassrooms clean look) */
 [data-theme="light"] {
-    --bg-dark: hsl(220, 20%, 97%);
-    --bg-card: hsla(220, 20%, 100%, 0.8);
-    --bg-card-hover: hsla(220, 20%, 100%, 0.95);
-    --border-color: hsla(220, 20%, 86%, 0.6);
-    --border-glow: hsla(268, 60%, 52%, 0.15);
+    --bg-dark: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f3f4f6;
+    --border-color: #e5e7eb;
+    --border-glow: rgba(92, 45, 145, 0.08);
     
-    --text-main: hsl(230, 20%, 12%);
-    --text-muted: hsl(230, 12%, 42%);
-    --text-dim: hsl(230, 10%, 58%);
-    --shadow-main: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
+    --text-main: #1f2937;
+    --text-muted: #4b5563;
+    --text-dim: #9ca3af;
+    --shadow-main: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 /* ==========================================
@@ -174,10 +174,12 @@ button {
     font-weight: 800;
     font-size: 1.25rem;
     letter-spacing: -0.5px;
+    color: var(--primary);
+    text-transform: lowercase;
 }
 
 .logo-text span {
-    color: var(--primary);
+    color: var(--accent);
 }
 
 .sidebar-nav {
