@@ -1,0 +1,4038 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fasoclassroom - Plateforme e-learning SaaS premium</title>
+    <meta name="description" content="Une plateforme d'apprentissage en ligne moderne, progressive et certifiante inspirée des meilleurs standards.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Global JS Error Diagnostic Banner -->
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = "position: fixed; top: 10px; left: 10px; right: 10px; background: #ef4444; color: #fff; padding: 15px; border-radius: 8px; z-index: 999999; font-family: monospace; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: 2px solid #fff;";
+            errDiv.innerHTML = "<strong>JS Exception caught:</strong><br>" + message + "<br>in " + source + " at line " + lineno;
+            document.body.appendChild(errDiv);
+            return false;
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = "position: fixed; top: 10px; left: 10px; right: 10px; background: #ef4444; color: #fff; padding: 15px; border-radius: 8px; z-index: 999999; font-family: monospace; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: 2px solid #fff;";
+            errDiv.innerHTML = "<strong>Promise Rejection:</strong><br>" + event.reason;
+            document.body.appendChild(errDiv);
+        });
+    </script>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- Background meshes -->
+    <div class="bg-glow-container" aria-hidden="true">
+        <div class="bg-glow-1"></div>
+        <div class="bg-glow-2"></div>
+    </div>
+
+    <!-- ==========================================
+         LANDING PAGE CONTAINER
+         ========================================== -->
+    <div id="landing-container" style="display: block;">
+        <!-- Header -->
+        <header class="landing-header">
+            <div class="landing-logo">
+                Faso<span style="color: #7451EB; font-weight: 800;">classroom</span>
+            </div>
+            <nav class="landing-nav-links">
+                <a class="landing-nav-link" onclick="scrollToSection('landing-hero')">Accueil</a>
+                <a class="landing-nav-link" onclick="scrollToSection('landing-features')">Notre modèle</a>
+                <a class="landing-nav-link" onclick="scrollToSection('landing-testimonials')">Témoignages</a>
+            </nav>
+            <div id="landing-auth-btn-container">
+                <button class="btn btn-outline" onclick="showAuthPage()" style="border-color: #7451EB; color: #7451EB;">Connexion</button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="landing-hero" id="landing-hero">
+            <div class="hero-left">
+                <h2>Des compétences d'aujourd'hui qui ont de l'avenir</h2>
+                <p>Notre différence ? Une école 100% en ligne et un modèle pédagogique unique qui seront les clés de votre réussite.</p>
+                
+                <div class="hero-cards-grid">
+                    <div class="hero-card students">
+                        <h3>Étudiants</h3>
+                        <p>Trouvez un grand rôle vers votre nouvelle carrière en suivant l'une de nos formations HSE certifiantes.</p>
+                        <button class="btn btn-primary" onclick="showAuthPage()" style="background: #7451EB; border-color: #7451EB; width: 100%;">Démarrer mon inscription</button>
+                    </div>
+                    <div class="hero-card employers">
+                        <h3>Employeurs</h3>
+                        <p>Recrutez des talents qualifiés en HSE et formez vos équipes à la prévention des risques industriels.</p>
+                        <button class="btn btn-outline" onclick="showAuthPage()" style="width: 100%; border-color: #7451EB; color: #7451EB;">Explorer l'espace employeur</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right">
+                <img src="assets/hero_student.jpg" alt="Étudiante souriante" class="hero-right-img">
+            </div>
+        </section>
+
+        <!-- Savoir. Faire. Section -->
+        <section class="landing-features-section" id="landing-features">
+            <h3 class="features-title">Savoir. Faire. Savoir-faire.</h3>
+            <p class="features-subtitle">Avec Fasoclassroom, découvrez une nouvelle façon d'apprendre : 20% de théorie, 80% de pratique.</p>
+            
+            <div class="features-grid">
+                <div class="feature-col">
+                    <div class="feature-icon-wrapper">
+                        <span>🌍</span>
+                    </div>
+                    <h4>Apprenez où que vous soyez</h4>
+                    <p>Accédez à votre formation 100% en ligne au bureau, à la maison, en ville ou sur le terrain. Partout !</p>
+                </div>
+                <div class="feature-col">
+                    <div class="feature-icon-wrapper">
+                        <span>🤝</span>
+                    </div>
+                    <h4>Un mentor pour vous accompagner</h4>
+                    <p>Bénéficiez des conseils d'un expert professionnel en HSE qui vous aide à progresser tout au long de votre formation.</p>
+                </div>
+                <div class="feature-col">
+                    <div class="feature-icon-wrapper">
+                        <span>⚙️</span>
+                    </div>
+                    <h4>Travaillez sur des projets réels</h4>
+                    <p>Réalisez des projets concrets, issus de scénarios métiers en qualité de l'air, bruit et sécurité au travail.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="landing-testimonials" id="landing-testimonials">
+            <div class="testimonial-banner">
+                <div class="testimonial-left">
+                    <img src="assets/testimonial_chloe.jpg" alt="Chloé" class="testimonial-left-img">
+                </div>
+                <div class="testimonial-right">
+                    <h3>Nos étudiants témoignent</h3>
+                    <p class="quote">« Ma formation m'a beaucoup plu parce qu'elle était très adaptée à mes contraintes de temps et d'organisation ! Tout est à distance, mais je me sentais quand même très accompagnée grâce aux rendez-vous réguliers avec mon mentor. »</p>
+                    <p class="author">Chloé - Conseillère emploi et évolution professionnelle</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h5>Pour les étudiants</h5>
+                    <ul>
+                        <li><a onclick="showAuthPage()">Formations HSE</a></li>
+                        <li><a onclick="showAuthPage()">Tarifs & Financement</a></li>
+                        <li><a onclick="showAuthPage()">Fonctionnement du mentorat</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Pour les employeurs</h5>
+                    <ul>
+                        <li><a onclick="showAuthPage()">Former ses salariés</a></li>
+                        <li><a onclick="showAuthPage()">Recruter des alternants</a></li>
+                        <li><a onclick="showAuthPage()">Solutions sur-mesure</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Aide & Contact</h5>
+                    <ul>
+                        <li><a onclick="showAuthPage()">Centre d'aide</a></li>
+                        <li><a onclick="showAuthPage()">Nous contacter</a></li>
+                        <li><a onclick="showAuthPage()">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Langue & Labels</h5>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">🇫🇷 Français</p>
+                    <div style="border: 1px solid var(--border-color); padding: 0.5rem; border-radius: 4px; display: inline-block;">
+                        <span style="font-weight: bold; color: var(--accent); font-size: 0.8rem;">Label B Corp Certifié</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Fasoclassroom. Tous droits réservés.</p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#" style="font-size: 0.8rem; color: var(--text-muted); text-decoration: none;">Mentions légales</a>
+                    <a href="#" style="font-size: 0.8rem; color: var(--text-muted); text-decoration: none;">Données personnelles</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ==========================================
+         AUTHENTICATION PAGE CONTAINER
+         ========================================== -->
+    <div id="auth-container" style="display: none;">
+        <div class="auth-split-wrapper">
+            <!-- Left Panel (Login form) -->
+            <div class="auth-left-panel">
+                <div class="landing-logo" style="cursor: pointer;" onclick="showLandingPage()">
+                    Faso<span style="color: #7451EB; font-weight: 800;">classroom</span>
+                </div>
+                
+                <div class="auth-form-container">
+                    <h2 id="auth-title">Bienvenue</h2>
+                    <p class="subtitle" id="auth-subtitle">Connexion ou création de compte en 1 minute</p>
+                    
+                    <!-- Form step 1: Email -->
+                    <div id="auth-step-email">
+                        <div class="auth-form-group">
+                            <label for="auth-email">E-mail</label>
+                            <input type="email" id="auth-email" placeholder="nom@exemple.com" required>
+                        </div>
+                        <button class="btn btn-primary" id="btn-auth-email-continue" onclick="handleAuthEmail()" style="background: #7451EB; border-color: #7451EB; width: 100%; padding: 0.75rem;">Continuer</button>
+                    </div>
+
+                    <!-- Form step 1.5: Password Login (Hidden by default) -->
+                    <div id="auth-step-password" style="display: none;">
+                        <div class="auth-form-group">
+                            <label for="auth-password">Mot de passe</label>
+                            <input type="password" id="auth-password" placeholder="••••••••" required>
+                        </div>
+                        <button class="btn btn-primary" id="btn-auth-login-submit" onclick="handleAuthLoginWithPassword()" style="background: #7451EB; border-color: #7451EB; width: 100%; padding: 0.75rem; margin-bottom: 0.5rem;">Se connecter</button>
+                        <button class="btn btn-outline" onclick="showAuthEmailStep()" style="width: 100%; padding: 0.75rem;">Retour</button>
+                    </div>
+
+                    <!-- Form step 2: New account details (Hidden by default) -->
+                    <div id="auth-step-register" style="display: none;">
+                        <div class="auth-form-group">
+                            <label for="auth-name">Nom complet</label>
+                            <input type="text" id="auth-name" placeholder="Ex: Jean Dupont" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label for="auth-register-password">Mot de passe</label>
+                            <input type="password" id="auth-register-password" placeholder="Minimum 6 caractères" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label for="auth-role">Votre rôle</label>
+                            <select id="auth-role" class="btn-outline" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color);">
+                                <option value="Étudiant">Étudiant (Suivre les cours)</option>
+                                <option value="Formateur">Formateur / Administrateur (Créer des cours & suivre)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btn-auth-register-submit" onclick="handleAuthRegister()" style="background: #7451EB; border-color: #7451EB; width: 100%; padding: 0.75rem; margin-bottom: 0.5rem;">S'inscrire et se connecter</button>
+                        <button class="btn btn-outline" onclick="showAuthEmailStep()" style="width: 100%; padding: 0.75rem;">Retour</button>
+                    </div>
+
+                    <div class="auth-divider">
+                        <span>ou continuer avec</span>
+                    </div>
+
+                    <div class="auth-social-buttons">
+                        <button class="auth-social-btn" onclick="handleSocialLogin('Google')">
+                            <!-- Google G icon -->
+                            <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.118 4.114-3.478 0-6.3-2.822-6.3-6.3 0-3.478 2.822-6.3 6.3-6.3 1.63 0 3.106.626 4.225 1.636l3.18-3.18C19.14 2.223 15.894 1 12.24 1 6.05 1 1 6.05 1 12.24s5.05 11.24 11.24 11.24c6.19 0 11.24-5.05 11.24-11.24 0-.785-.078-1.571-.235-2.355H12.24z"/></svg>
+                        </button>
+                        <button class="auth-social-btn" onclick="handleSocialLogin('Facebook')">
+                            <!-- Facebook icon -->
+                            <svg viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </button>
+                        <button class="auth-social-btn" onclick="handleSocialLogin('Apple')">
+                            <!-- Apple icon -->
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.22.67-2.94 1.5-.62.71-1.16 1.85-1.01 2.96 1.12.09 2.27-.58 2.96-1.4z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                    En continuant, vous acceptez nos CGU et notre politique de confidentialité.
+                </div>
+            </div>
+
+            <!-- Right Panel (Anthony quote) -->
+            <div class="auth-right-panel">
+                <div class="auth-right-quote">
+                    <p class="quote-text">« Je ne connaissais pas ce genre de formations en ligne. Mes appréhensions se sont levées tout de suite car j'ai été très entouré par mon mentor et la communauté étudiante. »</p>
+                    <p class="quote-author">Anthony - Étudiant HSE, financé par son entreprise</p>
+                </div>
+                
+                <div class="auth-right-image-container">
+                    <img src="assets/auth_anthony.jpg" alt="Anthony" class="auth-right-img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Shell Wrapper (Tw✖column layout) -->
+    <div class="app-shell" style="display: none;">
+
+        
+        <!-- ==========================================
+             LEFT NAVIGATION SIDEBAR (APP SHELL)
+             ========================================== -->
+        <aside class="main-sidebar" id="main-sidebar">
+            <div class="sidebar-logo">
+                <div class="log✖icon">⚡</div>
+                <div class="log✖text">Faso<span>classroom</span></div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active" data-page="dashboard" id="side-dashboard">
+                    <span class="icon">📊</span>
+                    <span class="label">Tableau de bord</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="catalog" id="side-catalog">
+                    <span class="icon">📚</span>
+                    <span class="label">Catalogue de cours</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="verify" id="side-verify">
+                    <span class="icon">🎓</span>
+                    <span class="label">Certifications</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="backoffice" id="side-backoffice">
+                    <span class="icon">🛠</span>
+                    <span class="label">Back-office</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-compact" id="profile-compact" style="display: none;">
+                    <div class="avatar avatar-sm" id="sidebar-avatar">JD</div>
+                    <div class="user-meta-info">
+                        <strong class="user-name" id="sidebar-user-name">Jean Dupont</strong>
+                        <span class="user-role">Étudiant</span>
+                    </div>
+                </div>
+                <button class="btn btn-outline" id="btn-login-sidebar" style="width: 100%; justify-content: center; margin-top: 0.5rem;">Connexion</button>
+            </div>
+        </aside>
+
+        <!-- ==========================================
+             MAIN CONTENT VIEWPORT
+             ========================================== -->
+        <div class="main-viewport">
+            
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-toggle-btn" id="mobile-sidebar-toggle" aria-label="Toggle Navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <h1 class="page-title-display" id="viewport-title">Tableau de bord</h1>
+                </div>
+                <div class="header-right">
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle-btn" id="theme-toggle" title="Changer le thème" aria-label="Toggle theme">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"></path></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Scrollable App Container -->
+            <main class="app-container">
+
+                <!-- =======================================================
+                     PAGE 1 : TABLEAU DE BORD (DASHBOARD)
+                     ======================================================= -->
+                <section class="page active" id="page-dashboard">
+                    <!-- Welcome Hero Banner -->
+                    <div class="welcome-banner" style="margin-bottom: 2rem;">
+                        <div class="banner-content">
+                            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                Boostez votre recherche de compétences grâce à nos formations !
+                            </h2>
+                            <p style="color: var(--text-muted); max-width: 600px; font-size: 0.95rem; margin-bottom: 1.5rem;">
+                                Accédez à des formations de niveau expert en ingénierie logicielle et architecture cloud avec des cas pratiques réels.
+                            </p>
+                            <button class="btn btn-primary" id="dash-explore-btn">Explorer les formations</button>
+                        </div>
+                    </div>
+
+                    <!-- Enrollment progress card (Votre Dossier) -->
+                    <div class="card dossier-card" style="margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Votre dossier d'inscription</h3>
+                        <div class="dossier-progress-steps">
+                            <div class="step-item active">
+                                <div class="step-dot"></div>
+                                <span class="step-label">Profil</span>
+                            </div>
+                            <div class="step-line active"></div>
+                            <div class="step-item active">
+                                <div class="step-dot"></div>
+                                <span class="step-label">Orientation</span>
+                            </div>
+                            <div class="step-line" id="dossier-step-line-final"></div>
+                            <div class="step-item" id="dossier-step-item-final">
+                                <div class="step-dot"></div>
+                                <span class="step-label">Finalisation</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                            <p style="font-size: 0.85rem; color: var(--text-muted);" id="dossier-status-text">Votre dossier est complété à 66%. Finalisez-le pour accéder à vos cours officiels.</p>
+                            <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" id="dossier-action-btn" onclick="openCheckoutModal()">Finaliser et Payer (15 000 FCFA)</button>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <!-- Active Courses Progress -->
+                        <div class="dashboard-main-col">
+                            <div class="card" style="margin-bottom: 2rem;">
+                                <h3 style="margin-bottom: 1rem;">Cours suivis</h3>
+                                <div id="active-courses-container">
+                                    <!-- Populated dynamically via JS -->
+                                    <p style="color: var(--text-dim); text-align: center; font-size: 0.9rem;">Aucun cours en cours de lecture. Parcourez le catalogue !</p>
+                                </div>
+                            </div>
+
+                            <!-- Recommended courses section (Carousel) -->
+                            <div class="card" style="margin-bottom: 2rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <h3>Formations recommandées</h3>
+                                    <div class="carousel-nav-arrows">
+                                        <button class="carousel-arrow" id="carousel-prev" aria-label="Previous">❮</button>
+                                        <button class="carousel-arrow" id="carousel-next" aria-label="Next">❯</button>
+                                    </div>
+                                </div>
+                                <div class="carousel-viewport">
+                                    <div class="carousel-track" id="recommended-carousel-track">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics Column -->
+                        <div class="dashboard-side-col">
+                            <div class="card stats-summary-card" style="margin-bottom: 1.5rem;">
+                                <h3 style="margin-bottom: 1.2rem;">Statistiques</h3>
+                                <div class="stat-row">
+                                    <div class="stat-number" id="stat-hours">42</div>
+                                    <div class="stat-desc">heures d'apprentissage</div>
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-number" id="stat-lessons-completed">12</div>
+                                    <div class="stat-desc">chapitres terminés</div>
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-number" id="stat-certs-unlocked">0</div>
+                                    <div class="stat-desc">certification obtenue</div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 1rem;">Mes Certificats</h3>
+                                <div class="certifications-panel" id="dashboard-certs-container">
+                                    <!-- Certificates List -->
+                                    <p style="color: var(--text-dim); font-size: 0.9rem;">Aucun certificat obtenu pour l'instant.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =======================================================
+                     PAGE 2 : CATALOGUE
+                     ======================================================= -->
+                <section class="page" id="page-catalog">
+                    <div class="catalog-header">
+                        <h2>Toutes les formations</h2>
+                        <div class="search-bar-container">
+                            <input type="text" id="catalog-search" placeholder="Rechercher un cours..." class="search-input">
+                        </div>
+                    </div>
+
+                    <div class="catalog-grid" id="catalog-courses-container">
+                        <!-- Course cards loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- =======================================================
+                     PAGE 3 : COURSE PLAYER
+                     ======================================================= -->
+                <section class="page" id="page-player">
+                    <div class="player-container">
+                        <!-- Navigation menu (sidebar) -->
+                        <aside class="player-sidebar card" id="player-sidebar">
+                            <button class="btn btn-outline" id="player-back-btn" style="width: 100%; margin-bottom: 1rem; font-size: 0.8rem; padding: 0.5rem;">
+                                ← Retour au tableau
+                            </button>
+                            <h4 class="sidebar-title" style="margin-bottom: 0.8rem;">Table des matières</h4>
+                            <div id="player-modules-accordion" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                                <!-- Accordion modules loaded dynamically -->
+                            </div>
+                        </aside>
+
+                        <!-- Content presentation -->
+                        <article class="player-content card" id="player-main-content" style="position: relative; padding-bottom: 80px;">
+                            <div class="content-viewer" id="lesson-content-viewer">
+                                <!-- Loaded dynamically: video/text/docs -->
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Sticky bottom progress & action bar -->
+                    <div class="sticky-player-footer" id="sticky-player-bar">
+                        <div class="sticky-footer-left">
+                            <span class="footer-course-title" id="sticky-course-title">Formation</span>
+                            <span class="footer-lesson-title" id="sticky-lesson-title">Leçon en cours</span>
+                        </div>
+                        <div class="sticky-footer-center">
+                            <div class="progress-bar-container" style="width: 180px; height: 6px; margin-bottom: 0.2rem;">
+                                <div class="progress-bar-fill" id="sticky-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <span style="font-size: 0.75rem; color: var(--text-dim);" id="sticky-progress-text">Progression : 0%</span>
+                        </div>
+                        <div class="sticky-footer-right">
+                            <button class="btn btn-outline" id="btn-sticky-prev" style="padding: 0.5rem 0.8rem;">Précédent</button>
+                            <button class="btn btn-primary" id="btn-sticky-next" style="padding: 0.5rem 1rem;">Marquer comme terminé</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =======================================================
+                     PAGE 4 : QUIZ & EXAM IMMERSIVE VIEW
+                     ======================================================= -->
+                <section class="page" id="page-quiz">
+                    <div class="quiz-container card">
+                        <div class="quiz-header">
+                            <h2 id="quiz-title">évaluation</h2>
+                            <div class="quiz-timer" id="quiz-timer-container" style="display: none;">
+                                ⏱️ <span id="quiz-time-left">00:00</span>
+                            </div>
+                        </div>
+
+                        <!-- Anti-cheat Alert System -->
+                        <div class="cheat-alert-box" id="cheat-alert-box">
+                            <strong>⚡️ ALERTE DE SÉCURITÉ :</strong> Changement de focus détecté ! 
+                            Restez sur la page. Il vous reste <span id="cheat-remaining-attempts">3</span> avertissements avant invalidation.
+                        </div>
+
+                        <div id="quiz-question-box">
+                            <div class="quiz-progress" id="quiz-progress-text">Question 1 sur 5</div>
+                            
+                            <div class="progress-bar-container" style="margin-bottom: 1.5rem; height: 6px;">
+                                <div class="progress-bar-fill" id="quiz-progress-bar" style="width: 20%;"></div>
+                            </div>
+
+                            <div class="question-text" id="question-text-container">
+                                Question text here←
+                            </div>
+
+                            <ul class="options-list" id="options-container">
+                                <!-- Loaded dynamically -->
+                            </ul>
+
+                            <div class="quiz-actions">
+                                <span style="color: var(--text-dim); font-size: 0.85rem;" id="quiz-hints-text">Veuillez choisir une réponse.</span>
+                                <button class="btn btn-primary" id="btn-submit-question">Valider</button>
+                            </div>
+                        </div>
+
+                        <!-- Results Screen -->
+                        <div id="quiz-results-box" class="results-screen" style="display: none;">
+                            <div class="results-score-circle passed" id="result-score-circle">
+                                <div class="results-score-value" id="result-score-percent">0%</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);" id="result-score-fraction">0 / 0</div>
+                            </div>
+
+                            <h2 id="result-title" style="margin-bottom: 0.5rem;">Résultat</h2>
+                            <p id="result-text" style="color: var(--text-muted); max-width: 500px; margin: 0 auto 2rem auto;">
+                                Résultat détaillé...
+                            </p>
+
+                            <div style="display: flex; gap: 1rem; justify-content: center;">
+                                <button class="btn btn-outline" id="btn-quiz-retry">Réessayer</button>
+                                <button class="btn btn-primary" id="btn-quiz-continue">Retourner aux cours</button>
+                                <button class="btn btn-primary" id="btn-quiz-view-cert" style="display: none; background: linear-gradient(135deg, var(--accent), var(--primary));">Voir mon certificat</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =======================================================
+                     PAGE 5 : CERTIFICATE VERIFICATION
+                     ======================================================= -->
+                <section class="page" id="page-verify">
+                    <div class="verification-screen">
+                        <h2>Vérification publique de diplôme</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">Saisissez le code unique pour authentifier une certification Fasoclassroom.</p>
+                        
+                        <div class="card" style="display: flex; gap: 0.5rem; margin-bottom: 3rem;">
+                            <input type="text" id="cert-verify-input" placeholder="Ex: cert-xxxx-xxxx-xxxx" style="flex-grow: 1; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.2); color: #fff; font-family: monospace;">
+                            <button class="btn btn-primary" id="btn-run-verification">Rechercher</button>
+                        </div>
+
+                        <!-- Verification Result Card -->
+                        <div class="card" id="verification-result-card" style="display: none;">
+                            <div class="verif-status-badge valid" id="verif-badge">
+                                🛡 Diplôme Certifié par Fasoclassroom
+                            </div>
+
+                            <div class="certificate-preview-card">
+                                <div class="cert-header">
+                                    <div class="cert-logo">⚡</div>
+                                    <div class="cert-title">Certificat de Réussite</div>
+                                    <div class="cert-subtitle">FASOCLASSROOM ACADEMY</div>
+                                </div>
+
+                                <div class="cert-recipient">
+                                    <div class="cert-recipient-label">Décerné à</div>
+                                    <div class="cert-recipient-name" id="cert-display-recipient">Nom étudiant</div>
+                                </div>
+
+                                <div class="cert-desc">
+                                    Pour avoir complété avec succès et validé l'examen de certification finale de la formation
+                                    <strong id="cert-display-course" style="color: var(--primary-light);">Titre de cours</strong>.
+                                </div>
+
+                                <div class="cert-footer">
+                                    <div style="display: flex; gap: 1rem; align-items: center;">
+                                        <img id="cert-display-qrcode" src="" alt="QR Code de Vérification" style="width: 64px; height: 64px; background: #fff; padding: 4px; border-radius: 4px; border: 1px solid var(--border-color);">
+                                        <div class="cert-meta-info" style="text-align: left;">
+                                            ID de vérification: <span id="cert-display-uuid" style="font-family: monospace;">UUID</span><br>
+                                            Délivré le: <span id="cert-display-date">date</span>
+                                        </div>
+                                    </div>
+                                    <div class="cert-signature">
+                                        <div style="font-size: 1.1rem; color: var(--text-main); font-style: italic;">Fasoclassroom</div>
+                                        <div class="signature-line">Direction de l'Éducation</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-outline" id="btn-print-certificate">
+                                🖨 Imprimer ce certificat / Sauvegarder en PDF
+                            </button>
+                        </div>
+
+                        <!-- Verification Error -->
+                        <div class="card" id="verification-error-card" style="display: none; border-color: var(--danger);">
+                            <div class="verif-status-badge invalid">
+                                ✕ Certificat Inconnu
+                            </div>
+                            <p style="color: var(--text-muted);">Aucune certification n'est enregistrée avec cet identifiant unique.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =======================================================
+                     PAGE 6 : BACK-OFFICE ADMINISTRATEUR
+                     ======================================================= -->
+                <section class="page" id="page-backoffice">
+                    <div class="backoffice-container">
+                        <div class="backoffice-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <h2 style="font-size: 1.6rem; margin-bottom: 0.25rem;">Espace Formateur</h2>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">Gérez vos formations et suivez les résultats des apprenants en temps réel.</p>
+                            </div>
+                            <div class="backoffice-tabs" style="display: flex; gap: 0.5rem; background: var(--bg-card); padding: 0.35rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                                <button class="btn btn-outline active" id="tab-bo-students" style="padding: 0.5rem 1rem; font-size: 0.85rem; border: none; background: transparent;">📊 Suivi des étudiants</button>
+                                <button class="btn btn-outline" id="tab-bo-builder" style="padding: 0.5rem 1rem; font-size: 0.85rem; border: none; background: transparent;">🆕 Créateur de cours</button>
+                            </div>
+                        </div>
+
+                        <!-- PANEL 1: STUDENT TRACKING -->
+                        <div class="bo-panel" id="panel-bo-students">
+                            <div class="stats-grid" style="margin-bottom: 2rem;">
+                                <div class="stat-card">
+                                    <div class="stat-label">Inscriptions totales</div>
+                                    <div class="stat-value" id="bo-stat-students-count">3</div>
+                                    <div class="stat-trend trend-up">📈 Actifs</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Cours publiés</div>
+                                    <div class="stat-value" id="bo-stat-courses-count">2</div>
+                                    <div class="stat-trend">📚 En ligne</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Certificats délivrés</div>
+                                    <div class="stat-value" id="bo-stat-certs-count">1</div>
+                                    <div class="stat-trend trend-up">🌟 Validés</div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="padding: 1.5rem; overflow-x: auto;">
+                                <h3 style="font-size: 1.1rem; margin-bottom: 1.2rem;">Suivi individuel</h3>
+                                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                    <thead>
+                                        <tr style="border-bottom: 1.5px solid var(--border-color); color: var(--text-dim); font-size: 0.85rem;">
+                                            <th style="padding: 0.75rem 0.5rem;">Étudiant</th>
+                                            <th style="padding: 0.75rem 0.5rem;">Cours suivi</th>
+                                            <th style="padding: 0.75rem 0.5rem;">Progression</th>
+                                            <th style="padding: 0.75rem 0.5rem;">Certificat</th>
+                                            <th style="padding: 0.75rem 0.5rem; text-align: right;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bo-students-list">
+                                        <!-- Loaded dynamically in app.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- PANEL 2: COURSE BUILDER -->
+                        <div class="bo-panel" id="panel-bo-builder" style="display: none;">
+                            <div class="card" style="padding: 2rem;">
+                                <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem;">Créer un nouveau cours</h3>
+                                
+                                <form id="form-course-builder" onsubmit="return false;">
+                                    <!-- Course Metadata -->
+                                    <div class="form-row" style="display: grid; grid-template-columns: repeat(aut✖fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                                        <div class="form-group">
+                                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Titre de la formation</label>
+                                            <input type="text" id="builder-course-title" placeholder="Ex: Master Class Docker & Kubernetes" required style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff;">
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Identifiant unique (ID URL)</label>
+                                            <input type="text" id="builder-course-id" placeholder="Ex: course-docker" required style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff; font-family: monospace;">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row" style="display: grid; grid-template-columns: repeat(aut✖fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                                        <div class="form-group">
+                                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Durée estimée</label>
+                                            <input type="text" id="builder-course-duration" placeholder="Ex: 12h" required style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff;">
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Niveau</label>
+                                            <select id="builder-course-level" style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: #1a1b24; color: #fff;">
+                                                <option value="easy">Débutant</option>
+                                                <option value="medium" selected>Intermédiaire</option>
+                                                <option value="hard">Avancé</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 2rem;">
+                                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Description du cours</label>
+                                        <textarea id="builder-course-desc" rows="3" placeholder="Présentez les objectifs de la formation..." required style="width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: rgba(0,0,0,0.25); color: #fff; resize: vertical;"></textarea>
+                                    </div>
+
+                                    <!-- Modules list container -->
+                                    <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-bottom: 1.5rem;">
+                                        <h4 style="font-size: 1.1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                                            Modules & Chapitres du cours
+                                            <button type="button" class="btn btn-outline" id="btn-builder-add-module" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">+ Ajouter un Module</button>
+                                        </h4>
+                                        <div id="builder-modules-list" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                            <!-- Dynamically appended modules -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit buttons -->
+                                    <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                                        <button type="button" class="btn btn-outline" id="btn-builder-reset">Réinitialiser</button>
+                                        <button type="submit" class="btn btn-primary" id="btn-builder-submit">Publier le cours dans le Catalogue</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- MODAL: STUDENT PROFILE DETAILED TRACKING -->
+                        <div id="bo-student-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 10000; padding: 1.5rem;">
+                            <div class="card" style="width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 2rem; position: relative;">
+                                <button id="btn-close-bo-modal" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-dim); font-size: 1.4rem; cursor: pointer;">✕</button>
+                                <h3 id="bo-modal-student-name" style="font-size: 1.3rem; margin-bottom: 0.25rem;">Nom Étudiant</h3>
+                                <p id="bo-modal-student-email" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">email@example.com</p>
+                                
+                                <div id="bo-modal-details-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <!-- Progress detail lists loaded dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         CHECKOUT / PAYMENT MODAL (Burkina Faso)
+         ========================================== -->
+    <div id="checkout-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 10000; padding: 1.5rem;">
+        <div class="card" style="width: 100%; max-width: 500px; padding: 2rem; position: relative;">
+            <button onclick="closeCheckoutModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-dim); font-size: 1.4rem; cursor: pointer;">✕</button>
+            
+            <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Finaliser mon inscription</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                Frais d'inscription de certification Fasoclassroom : <strong style="color: #7451EB; font-size: 1.1rem;">15 000 FCFA</strong>
+            </p>
+
+            <!-- Tabs -->
+            <div class="payment-tabs">
+                <button class="payment-tab-btn active" id="pay-tab-momo" onclick="switchPayTab('momo')">Mobile Money</button>
+                <button class="payment-tab-btn" id="pay-tab-card" onclick="switchPayTab('card')">Carte Bancaire</button>
+                <button class="payment-tab-btn" id="pay-tab-transfer" onclick="switchPayTab('transfer')">Virement</button>
+            </div>
+
+            <!-- Tab Content 1: Mobile Money -->
+            <div class="payment-method-container" id="pay-content-momo">
+                <div class="momo-operator-select">
+                    <div class="momo-operator-card orange selected" id="momo-op-orange" onclick="selectMomoOperator('orange')">
+                        <div class="momo-logo-sim orange">Orange</div>
+                        <div class="momo-operator-name">Orange Money</div>
+                    </div>
+                    <div class="momo-operator-card moov" id="momo-op-moov" onclick="selectMomoOperator('moov')">
+                        <div class="momo-logo-sim moov">Moov</div>
+                        <div class="momo-operator-name">Moov Money</div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="pay-phone" style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">Numéro de téléphone</label>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <span style="font-size: 1rem; font-weight: 700; color: var(--text-main); background: var(--bg-card); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">+226</span>
+                        <input type="tel" id="pay-phone" placeholder="76 00 00 00" style="flex: 1; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); color: var(--text-main); font-size: 1rem;">
+                    </div>
+                </div>
+
+                <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                    💡 Une demande de débit automatique de 15 000 FCFA sera envoyée sur votre téléphone. Composez le code PIN pour valider la transaction.
+                </p>
+
+                <button class="btn btn-primary" onclick="submitMomoPayment()" style="background: #7451EB; border-color: #7451EB; width: 100%; padding: 0.8rem; margin-top: 0.5rem;">Payer 15 000 FCFA</button>
+            </div>
+
+            <!-- Tab Content 2: Credit Card -->
+            <div class="payment-method-container" id="pay-content-card" style="display: none;">
+                <div class="form-group">
+                    <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">Numéro de Carte</label>
+                    <input type="text" placeholder="4000 1234 5678 9010" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); color: var(--text-main); font-size: 1rem;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">Date d'expiration</label>
+                        <input type="text" placeholder="MM/AA" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); color: var(--text-main); font-size: 1rem;">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">CVV</label>
+                        <input type="text" placeholder="123" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); color: var(--text-main); font-size: 1rem;">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="submitCardPayment()" style="background: #7451EB; border-color: #7451EB; width: 100%; padding: 0.8rem; margin-top: 0.5rem;">Valider le paiement par carte</button>
+            </div>
+
+            <!-- Tab Content 3: Bank Transfer -->
+            <div class="payment-method-container" id="pay-content-transfer" style="display: none;">
+                <p style="font-size: 0.8rem; color: var(--text-main); line-height: 1.5; margin-bottom: 1rem;">
+                    Veuillez effectuer le virement vers les coordonnées bancaires suivantes :
+                </p>
+                <div style="padding: 1rem; background: var(--bg-card); border-radius: var(--radius-md); font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                    <strong>Banque :</strong> Coris Bank International BF<br>
+                    <strong>Titulaire :</strong> FASOCLASSROOM SARL<br>
+                    <strong>RIB :</strong> BF251 01001 002345678901 23
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.5rem;">Bordereau de paiement (.jpg, .pdf)</label>
+                    <input type="file" style="width: 100%; font-size: 0.85rem;">
+                </div>
+                <button class="btn btn-primary" onclick="submitTransferPayment()" style="background: #7451EB; border-color: #7451EB; width: 100%; padding: 0.8rem; margin-top: 0.5rem;">Envoyer mon justificatif</button>
+            </div>
+
+            <!-- Processing Overlay (Simulated Momopay loading) -->
+            <div id="pay-processing" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-main); border-radius: var(--radius-lg); align-items: center; justify-content: center; flex-direction: column; padding: 2rem; text-align: center; z-index: 10;">
+                <div class="momo-loader-spinner"></div>
+                <h4 id="pay-processing-title" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Traitement de la demande...</h4>
+                <p id="pay-processing-subtitle" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                    Validation en cours. Veuillez vérifier votre écran mobile et saisir votre code secret PIN de confirmation.
+                </p>
+            </div>
+
+            <!-- Success Screen -->
+            <div id="pay-success" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-main); border-radius: var(--radius-lg); align-items: center; justify-content: center; flex-direction: column; padding: 2rem; text-align: center; z-index: 11;">
+                <div style="font-size: 4rem; color: #25d366; margin-bottom: 1rem;">✅</div>
+                <h4 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text-main);">Paiement approuvé !</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.4;">
+                    Félicitations, votre paiement de 15 000 FCFA a été validé. Votre dossier d'inscription est finalisé !
+                </p>
+                <button class="btn btn-primary" onclick="finalizeSuccessPayment()" style="background: #25d366; border-color: #25d366; width: 100%;">Commencer à apprendre</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/22670000000?text=Bonjour%20Fasoclassroom%2C%20je%20souhaiterais%20avoir%20des%20informations%20sur%20les%20formations." 
+       class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Discuter sur WhatsApp">
+        <svg viewBox="0 0 448 512"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+    </a>
+
+    <!-- Main scripts loading (Inlined for CORS-free local execution) -->
+    <script>
+const COURSES = [
+    {
+        id: "course-air",
+        title: "Méthodes d'analyse de la qualité de l'air",
+        description: "Apprenez à prélever, quantifier et interpréter la présence des polluants atmosphériques (particules fines, NOx, COV) selon les réglementations nationales et internationales.",
+        level: "intermediate",
+        levelText: "Intermédiaire",
+        duration: "10 heures",
+        lessonsCount: 6,
+        modules: [
+            {
+                id: "air-mod1",
+                title: "Prélèvement et échantillonnage de l'air",
+                description: "Maîtrisez les techniques de capture passives et actives des composés gazeux et particulaires.",
+                chapters: [
+                    {
+                        id: "air-m1-c1",
+                        title: "Introduction et Échantillonnage passif",
+                        lessons: [
+                            {
+                                id: "air-m1-c1-l1",
+                                title: "Introduction à la métrologie de la qualité de l'air",
+                                type: "video",
+                                duration: "8 min",
+                                videoUrl: "https://www.youtube.com/embed/l8mBPCz2Tio",
+                                content: "Introduction aux enjeux de la surveillance de la qualité de l'air, définitions des polluants réglementés et panorama général des méthodes de mesure."
+                            },
+                            {
+                                id: "air-m1-c1-l2",
+                                title: "Principes de l'échantillonnage passif",
+                                type: "document",
+                                duration: "15 min",
+                                documentUrl: "prelevement_passif.pdf",
+                                content: `
+                                    <h2>Échantillonnage passif par tubes à diffusion</h2>
+                                    <p>L'échantillonnage passif repose sur le transfert de molécules de gaz par diffusion moléculaire vers un support adsorbant, sans apport d'énergie (aucune pompe active).</p>
+                                    <h3>Avantages principaux :</h3>
+                                    <ul>
+                                        <li>Économique et facile à déployer en grand nombre sur le terrain.</li>
+                                        <li>Idéal pour obtenir des concentrations moyennes sur de longues périodes (ex: de 1 à 4 semaines).</li>
+                                        <li>Ne nécessite aucune alimentation électrique.</li>
+                                    </ul>
+                                    <h3>Loi physique sous-jacente (Loi de Fick) :</h3>
+                                    <p>Le débit de diffusion <code>J</code> est proportionnel au gradient de concentration : <code>J = D * (A / L) * (C_ext - C_int)</code></p>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        id: "air-m1-c2",
+                        title: "Échantillonnage actif & Règles d'implantation",
+                        lessons: [
+                            {
+                                id: "air-m1-c2-l1",
+                                title: "Principes du prélèvement actif",
+                                type: "document",
+                                duration: "12 min",
+                                documentUrl: "prelevement_actif.pdf",
+                                content: `
+                                    <h2>Échantillonnage actif (pompes à débit régulé)</h2>
+                                    <p>Contrairement aux tubes passifs, le prélèvement actif force le passage de l'air à travers un milieu de collecte (filtre, cartouche d'adsorption ou barboteur) à un débit contrôlé.</p>
+                                    <h3>Critères opérationnels clés :</h3>
+                                    <ul>
+                                        <li><strong>Débit :</strong> Mesuré et étalonné avant et après chaque période de prélèvement.</li>
+                                        <li><strong>Température et pression :</strong> Enregistrées en continu pour corriger le volume d'air prélevé aux conditions de référence.</li>
+                                        <li><strong>Isocinétisme :</strong> Indispensable pour l'échantillonnage de particules dans les conduits ou flux d'air rapides.</li>
+                                    </ul>
+                                `
+                            },
+                            {
+                                id: "air-m1-c2-l2",
+                                title: "Exercice : Détermination de la hauteur minimale d'aspiration",
+                                type: "exercise",
+                                duration: "10 min",
+                                instructions: `
+                                    <h2>Hauteur réglementaire de la tête d'aspiration</h2>
+                                    <p>Pour assurer la représentativité des prélèvements de l'air ambiant et éviter les interférences du sol immédiat, la réglementation définit une hauteur minimale de prélèvement.</p>
+                                    <p><strong>Votre objectif :</strong> Écrivez l'instruction permettant de fixer la variable HAUTEUR_MIN à la hauteur minimale réglementaire recommandée (qui est de 1.5 mètres).</p>
+                                `,
+                                starterCode: `// Fixez la hauteur d'aspiration minimale à 1.5 mètres\n// Écrivez votre code ci-dessous (ex: HAUTEUR_MIN = ...)\n\n`,
+                                solutionPattern: "HAUTEUR_MIN\\s*=\\s*1\\.5",
+                                hint: "Utilisez l'écriture standard : HAUTEUR_MIN = 1.5"
+                            }
+                        ]
+                    }
+                ],
+                quiz: {
+                    quizId: "quiz-air-mod1",
+                    title: "Validation : Prélèvement et Échantillonnage",
+                    passingScore: 0.7,
+                    questions: [
+                        {
+                            id: "q-air-1",
+                            text: "Quelle loi physique régit le fonctionnement des tubes d'échantillonnage passif ?",
+                            options: [
+                                "La loi d'Ohm",
+                                "La loi de Fick",
+                                "La loi des gaz parfaits",
+                                "Le principe de Bernoulli"
+                            ],
+                            correctIndex: 1
+                        },
+                        {
+                            id: "q-air-2",
+                            text: "Quel paramètre est indispensable pour un prélèvement particulaire représentatif en conduit ?",
+                            options: [
+                                "La chimiluminescence",
+                                "Le maintien des conditions isocinétiques",
+                                "L'ionisation de flamme",
+                                "L'absence totale d'humidité"
+                            ],
+                            correctIndex: 1
+                        }
+                    ]
+                }
+            },
+            {
+                id: "air-mod2",
+                title: "Analyse physico-chimique des polluants",
+                description: "Techniques de laboratoire pour la quantification des molécules chimiques.",
+                chapters: [
+                    {
+                        id: "air-m2-c1",
+                        title: "Analyses de laboratoire et chromatographie",
+                        lessons: [
+                            {
+                                id: "air-m2-c1-l1",
+                                title: "Dosage des COV par GC-MS",
+                                type: "document",
+                                duration: "20 min",
+                                documentUrl: "gc_ms_cov.pdf",
+                                content: `
+                                    <h2>Chromatographie en Phase Gazeuse (GC) et Spectrométrie de Masse (MS)</h2>
+                                    <p>La GC-MS est la méthode de référence pour l'analyse des Composés Organiques Volatils (COV) capturés sur les tubes à diffusion.</p>
+                                    <h3>Phases analytiques :</h3>
+                                    <ol>
+                                        <li><strong>Désorption thermique :</strong> Le tube est chauffé pour libérer les COV vers l'injecteur chromatographique.</li>
+                                        <li><strong>Séparation (GC) :</strong> Les molécules sont séparées sur une colonne capillaire en fonction de leur volatilité et affinité chimique.</li>
+                                        <li><strong>Détection (MS) :</strong> Les molécules sont ionisées, séparées selon leur ratio masse/charge (m/z) et identifiées via une bibliothèque spectrale.</li>
+                                    </ol>
+                                `
+                            },
+                            {
+                                id: "air-m2-c1-l2",
+                                title: "Analyse en continu par chimiluminescence",
+                                type: "document",
+                                duration: "15 min",
+                                documentUrl: "nox_chimiluminescence.pdf",
+                                content: `
+                                    <h2>Dosage des NOx par chimiluminescence</h2>
+                                    <p>Cette méthode est utilisée pour le suivi en continu du Monoxyde d'Azote (NO) et du Dioxyde d'Azote (NO2).</p>
+                                    <p>Le NO réagit avec l'ozone (O3) pour former du NO2 dans un état excité, qui retourne à l'état fondamental en émettant une lumière détectable par un photomultiplicateur. Pour mesurer le NO2, on le réduit d'abord en NO à l'aide d'un convertisseur à haute température.</p>
+                                `
+                            }
+                        ]
+                    }
+                ],
+                quiz: {
+                    quizId: "quiz-air-mod2",
+                    title: "Validation : Analyse Analytique",
+                    passingScore: 0.7,
+                    questions: [
+                        {
+                            id: "q-air3",
+                            text: "Quel détecteur est couplé à la chromatographie gazeuse pour identifier précisément les polluants par leur rapport masse/charge ?",
+                            options: [
+                                "Le spectromètre de masse (MS)",
+                                "L'ionisation de flamme (FID)",
+                                "La capture d'électrons (ECD)",
+                                "L'absorption infrarouge"
+                            ],
+                            correctIndex: 0
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        id: "course-noise",
+        title: "Méthode d'analyse de la qualité du bruit et des vibrations",
+        description: "Maîtrisez la mesure du bruit environnemental et des vibrations en milieu de travail : utilisation du sonomètre, analyse spectrale et calcul de l'exposition quotidienne.",
+        level: "intermediate",
+        levelText: "Intermédiaire",
+        duration: "8 heures",
+        lessonsCount: 4,
+        modules: [
+            {
+                id: "noise-mod1",
+                title: "Métrologie acoustique et mesures physiques",
+                description: "Comprenez la physique du bruit et les réglages métrologiques nécessaires pour collecter des données conformes.",
+                chapters: [
+                    {
+                        id: "noise-m1-c1",
+                        title: "Les fondamentaux physiques et la décibel",
+                        lessons: [
+                            {
+                                id: "noise-m1-c1-l1",
+                                title: "Pondérations fréquentielles A et C",
+                                type: "document",
+                                duration: "12 min",
+                                documentUrl: "ponderations_ac.pdf",
+                                content: `
+                                    <h2>Pondération Fréquentielle Acoustique</h2>
+                                    <p>L'oreille humaine n'a pas la même sensibilité à toutes les fréquences du spectre audible.</p>
+                                    <h3>Les filtres de pondération :</h3>
+                                    <ul>
+                                        <li><strong>Pondération A (dB(A)) :</strong> Conçue pour mimer l'oreille humaine à faible niveau de pression sonore. Utilisée pour évaluer l'exposition globale et le risque de surdité professionnelle.</li>
+                                        <li><strong>Pondération C (dB(C)) :</strong> Utilisée pour les bruits d'impacts très brefs ou les sons à forte composante basse fréquence.</li>
+                                    </ul>
+                                `
+                            },
+                            {
+                                id: "noise-m1-c1-l2",
+                                title: "Le sonomètre et la chaîne de mesure",
+                                type: "document",
+                                duration: "15 min",
+                                documentUrl: "sonometre_guide.pdf",
+                                content: `
+                                    <h2>Le Sonomètre et son étalonnage</h2>
+                                    <p>Un sonomètre de classe 1 (précision maximale) ou de classe 2 est composé d'un microphone, d'un préamplificateur, de filtres et d'un écran d'affichage.</p>
+                                    <h3>Processus obligatoire d'étalonnage :</h3>
+                                    <p>Un calibrateur acoustique émettant un signal stable à 94 dB ou 114 dB à 1 kHz doit être utilisé **avant et après** chaque série de mesures. Toute dérive supérieure à 0.5 dB annule la campagne de mesures.</p>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        id: "noise-m1-c2",
+                        title: "Calculs acoustiques complexes",
+                        lessons: [
+                            {
+                                id: "noise-m1-c2-l1",
+                                title: "Calcul de sommation de sources de bruit",
+                                type: "exercise",
+                                duration: "12 min",
+                                instructions: `
+                                    <h2>Sommation logarithmique de sources de bruit</h2>
+                                    <p>Les décibels étant logarithmiques, deux sources de 80 dB en fonctionnement simultané ne produisent pas 160 dB, mais 83 dB.</p>
+                                    <p><strong>Votre objectif :</strong> Écrivez l'instruction définissant la fonction de sommation sous la forme L_TOTAL = 10 * log10(10^(L1/10) + 10^(L2/10)) pour valider le modèle.</p>
+                                `,
+                                starterCode: `// Écrivez l'instruction de sommation (ex: L_TOTAL = 10 * log10(sum))\n// Utilisez précisément la variable L_TOTAL dans votre formule :\n\n`,
+                                solutionPattern: "L_TOTAL\\s*=\\s*10\\s*\\*\\s*log10",
+                                hint: "Écrivez la formule d'affectation : L_TOTAL = 10 * log10"
+                            }
+                        ]
+                    }
+                ],
+                quiz: {
+                    quizId: "quiz-noise-mod1",
+                    title: "Validation : Métrologie Acoustique",
+                    passingScore: 0.7,
+                    questions: [
+                        {
+                            id: "q-noise-1",
+                            text: "Quelle pondération fréquentielle est utilisée par défaut pour évaluer les risques de perte auditive en milieu de travail ?",
+                            options: [
+                                "Pondération A (dB(A))",
+                                "Pondération C (dB(C))",
+                                "Pondération Z (linéaire)",
+                                "Pondération B (dB(B))"
+                            ],
+                            correctIndex: 0
+                        },
+                        {
+                            id: "q-noise-2",
+                            text: "Quelle est la dérive maximale autorisée sur le calibrateur avant/après mesures selon les normes ?",
+                            options: [
+                                "0.1 dB",
+                                "0.5 dB",
+                                "1.0 dB",
+                                "2.0 dB"
+                            ],
+                            correctIndex: 1
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        id: "course-safety",
+        title: "Normes et standards santé sécurité au travail applicables en milieu de travail",
+        description: "Formez-vous aux standards internationaux de prévention des risques d'incidents et d'accidents (norme ISO 45001), et à la structuration du Document Unique (DUER).",
+        level: "advanced",
+        levelText: "Avancé",
+        duration: "12 heures",
+        lessonsCount: 4,
+        modules: [
+            {
+                id: "safety-mod1",
+                title: "Cadre normatif et Évaluation des risques professionnels",
+                description: "Comprenez l'architecture de la norme ISO 45001 et les étapes clés pour identifier et coter les risques SST.",
+                chapters: [
+                    {
+                        id: "safety-m1-c1",
+                        title: "Introduction à l'ISO 45001",
+                        lessons: [
+                            {
+                                id: "safety-m1-c1-l1",
+                                title: "Les fondamentaux de la norme ISO 45001",
+                                type: "video",
+                                duration: "10 min",
+                                videoUrl: "https://www.youtube.com/embed/l8mBPCz2Tio",
+                                content: "Ce cours présente les exigences de l'ISO 45001 relative aux Systèmes de Management de la Santé et de la Sécurité au Travail (SMSST)."
+                            },
+                            {
+                                id: "safety-m1-c1-l2",
+                                title: "Coter le Risque Professionnel",
+                                type: "document",
+                                duration: "15 min",
+                                documentUrl: "cotation_risques.pdf",
+                                content: `
+                                    <h2>La méthodologie de cotation du risque</h2>
+                                    <p>L'évaluation des risques professionnels repose sur la cotation de la probabilité d'occurrence et de la gravité.</p>
+                                    <h3>Matrice de criticité de base :</h3>
+                                    <ul>
+                                        <li><strong>Probabilité (P) :</strong> Fréquence ou exposition de 1 (très rare) à 4 (très fréquente).</li>
+                                        <li><strong>Gravité (G) :</strong> Conséquences de l'accident potentiel de 1 (bénin) à 4 (mortel ou incapacité permanente).</li>
+                                    </ul>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        id: "safety-m1-c2",
+                        title: "Exercices pratiques d'évaluation",
+                        lessons: [
+                            {
+                                id: "safety-m1-c2-l1",
+                                title: "Exercice : Formule mathématique de la criticité",
+                                type: "exercise",
+                                duration: "10 min",
+                                instructions: `
+                                    <h2>Calcul du Risque Résiduel</h2>
+                                    <p>Le niveau de risque R se définit comme le produit direct de la Probabilité P par la Gravité G.</p>
+                                    <p><strong>Votre objectif :</strong> Écrivez l'équation d'affectation : R = P * G</p>
+                                `,
+                                starterCode: `// Écrivez l'équation de calcul de la criticité (ex: R = ...)\n// Utilisez P pour Probabilité et G pour Gravité :\n\n`,
+                                solutionPattern: "R\\s*=\\s*P\\s*\\*\\s*G",
+                                hint: "La réponse attendue est R = P * G"
+                            }
+                        ]
+                    }
+                ],
+                quiz: {
+                    quizId: "quiz-safety-mod1",
+                    title: "Validation : Évaluation des Risques et ISO 45001",
+                    passingScore: 0.7,
+                    questions: [
+                        {
+                            id: "q-safety-1",
+                            text: "Quel est l'objectif premier d'un SMSST certifié ISO 45001 ?",
+                            options: [
+                                "Augmenter le chiffre d'affaires",
+                                "Fournir des lieux de travail sûrs et sains et prévenir les traumatismes et pathologies",
+                                "Déclarer toutes les blessures à l'inspection",
+                                "Automatiser les postes de travail physiques"
+                            ],
+                            correctIndex: 1
+                        },
+                        {
+                            id: "q-safety-2",
+                            text: "Comment calcule-t-on le niveau de risque de criticité en SST ?",
+                            options: [
+                                "Risque = Probabilité + Gravité",
+                                "Risque = Probabilité * Gravité",
+                                "Risque = Gravité / Probabilité",
+                                "Risque = Coût financier / Temps"
+                            ],
+                            correctIndex: 1
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        id: "course-env",
+        title: "Évaluation des impacts & risques environnementaux et PGES",
+        description: "Maîtrisez les procédures d'évaluation environnementale stratégique (EES), les études d'impact sur l'environnement (EIE) et la rédaction de plans de gestion environnementale.",
+        level: "advanced",
+        levelText: "Avancé",
+        duration: "15 heures",
+        lessonsCount: 4,
+        modules: [
+            {
+                id: "env-mod1",
+                title: "Études d'Impact Environnemental et Social (EIES)",
+                description: "Connaître les exigences réglementaires et de planification pour minimiser l'empreinte environnementale des projets industriels.",
+                chapters: [
+                    {
+                        id: "env-m1-c1",
+                        title: "Méthodologie générale d'une EIES",
+                        lessons: [
+                            {
+                                id: "env-m1-c1-l1",
+                                title: "Le processus complet de l'étude d'impact",
+                                type: "video",
+                                duration: "12 min",
+                                videoUrl: "https://www.youtube.com/embed/l8mBPCz2Tio",
+                                content: "Introduction au processus de l'EIES : état initial de l'environnement, identification des impacts directs, indirects et cumulatifs."
+                            },
+                            {
+                                id: "env-m1-c1-l2",
+                                title: "La doctrine Eviter-Reduire-Compenser (ERC)",
+                                type: "document",
+                                duration: "15 min",
+                                documentUrl: "doctrine_erc.pdf",
+                                content: `
+                                    <h2>La doctrine réglementaire ERC</h2>
+                                    <p>L'évaluation des impacts environnementaux exige d'appliquer une hiérarchie stricte d'intervention :</p>
+                                    <ol>
+                                        <li><strong>Éviter :</strong> Modifier le projet pour éviter tout impact (ex: changement de tracé routier).</li>
+                                        <li><strong>Réduire :</strong> Mettre en œuvre des mesures pour atténuer l'intensité de l'impact inévitable.</li>
+                                        <li><strong>Compenser :</strong> Apporter une contrepartie positive équivalente pour compenser la perte écologique résiduelle.</li>
+                                    </ol>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        id: "env-m1-c2",
+                        title: "Exercice d'application réglementaire",
+                        lessons: [
+                            {
+                                id: "env-m1-c2-l1",
+                                title: "Exercice : Déclaration de la doctrine ERC",
+                                type: "exercise",
+                                duration: "8 min",
+                                instructions: `
+                                    <h2>La Doctrine Réglementaire</h2>
+                                    <p>Écrivez la valeur 'Eviter Reduire Compenser' pour initialiser la variable DOCTRINE afin de valider la conformité environnementale.</p>
+                                `,
+                                starterCode: `// Déclarez la doctrine réglementaire ERC en toutes lettres\n// DOCTRINE = "..."\n\n`,
+                                solutionPattern: "DOCTRINE\\s*=\\s*\"eviter\\s+reduire\\s+compenser\"",
+                                hint: "Écrivez : DOCTRINE = \"eviter reduire compenser\" en minuscules."
+                            }
+                        ]
+                    }
+                ],
+                quiz: {
+                    quizId: "quiz-env-mod1",
+                    title: "Validation : Processus d'EIES et PGES",
+                    passingScore: 0.7,
+                    questions: [
+                        {
+                            id: "q-env-1",
+                            text: "Dans quel ordre hiérarchique doit-on appliquer la doctrine environnementale réglementaire ?",
+                            options: [
+                                "Compenser, Éviter, Réduire",
+                                "Éviter, Réduire, Compenser",
+                                "Réduire, Compenser, Éviter",
+                                "Éviter, Compenser, Réduire"
+                            ],
+                            correctIndex: 1
+                        },
+                        {
+                            id: "q-env-2",
+                            text: "Que signifie le sigle PGES dans les rapports environnementaux ?",
+                            options: [
+                                "Plan de Gestion Environnementale et Sociale",
+                                "Projet de Génie Environnemental et Spatial",
+                                "Plan Global d'Évaluation de Sécurité",
+                                "Protocole Général d'Entretien du Site"
+                            ],
+                            correctIndex: 0
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+];
+
+window.COURSES = COURSES;
+
+    </script>
+    <script>
+// COURSES est accédé directement depuis le scope global défini par db.js
+
+// Supabase Configuration (Burkina Faso HSE Platform Backend)
+const SUPABASE_URL = "https://gzhuvxdsosxfcqpmqoka.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHV2eGRzb3N4ZmNxcG1xb2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTY4MjksImV4cCI6MjA5OTU5MjgyOX0.DsCpEiasObax_mi2QzhMs9h5mhnznF4gARPmFgCReyg";
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+// Unique UUID helper for mockup certificates
+function generateUUID() {
+    return 'cert-' + Math.random().toString(36).substr(2, 9) + '-' + Math.random().toString(36).substr(2, 9);
+}
+
+// Initial default state
+const DEFAULT_STATE = {
+    user: null, // Connected user
+    progress: {}, // Format: { courseId: { completedLessons: [lessonIds], passedQuizzes: [moduleIds], examAttempts: [scores], completed: false, certificateId: null } }
+    certificates: {}, // Format: { certId: { studentName, courseId, courseTitle, date, uuid, score } }
+    customCourses: [] // Dynamic administrator courses
+};
+
+class Store {
+    constructor() {
+        this.state = DEFAULT_STATE;
+        this.listeners = [];
+        this.init();
+        this.setupSupabaseListener();
+    }
+
+    init() {
+        const stored = localStorage.getItem('fasoclassroom_store');
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored) || {};
+                this.state = {
+                    user: parsed.user !== undefined ? parsed.user : null,
+                    progress: parsed.progress || {},
+                    certificates: parsed.certificates || {},
+                    customCourses: parsed.customCourses || []
+                };
+            } catch (e) {
+                console.error("Erreur lors de la lecture du LocalStorage", e);
+                this.state = DEFAULT_STATE;
+            }
+        }
+    }
+
+    setupSupabaseListener() {
+        if (!supabaseClient) return;
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (session && session.user) {
+                await this.syncSupabaseUser(session.user);
+            } else {
+                this.state.user = null;
+                this.save();
+            }
+        });
+    }
+
+    async syncSupabaseUser(sbUser) {
+        try {
+            // 1. Fetch Profile Details
+            let { data: profile, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', sbUser.id)
+                .maybeSingle();
+                
+            if (!profile) {
+                // If profile missing, insert it
+                profile = {
+                    id: sbUser.id,
+                    email: sbUser.email,
+                    name: sbUser.email.split('@')[0],
+                    role: 'Étudiant',
+                    has_paid: false
+                };
+                await supabaseClient.from('profiles').insert(profile);
+            }
+            
+            this.state.user = {
+                id: profile.id,
+                name: profile.name,
+                email: profile.email,
+                role: profile.role,
+                hasPaid: profile.has_paid
+            };
+            
+            // 2. Fetch Progress Details
+            const { data: dbProgress } = await supabaseClient
+                .from('course_progress')
+                .select('*')
+                .eq('user_id', sbUser.id);
+                
+            if (dbProgress && dbProgress.length > 0) {
+                dbProgress.forEach(row => {
+                    this.state.progress[row.course_id] = {
+                        completedLessons: row.completed_lessons || [],
+                        passedQuizzes: row.passed_quizzes || [],
+                        examAttempts: [],
+                        completed: row.completed || false,
+                        certificateId: row.certificate_id || null
+                    };
+                });
+            } else {
+                // Push local progress if empty on DB
+                await this.pushLocalProgressToSupabase(sbUser.id);
+            }
+            
+            // 3. Fetch Certificates Details
+            const { data: dbCerts } = await supabaseClient
+                .from('certificates')
+                .select('*')
+                .eq('user_id', sbUser.id);
+                
+            if (dbCerts) {
+                dbCerts.forEach(c => {
+                    this.state.certificates[c.id] = {
+                        uuid: c.id,
+                        studentName: c.student_name,
+                        courseId: c.course_id,
+                        courseTitle: c.course_title,
+                        date: c.date,
+                        score: c.score
+                    };
+                });
+            }
+            
+            this.save();
+        } catch (e) {
+            console.error("Error syncing with Supabase:", e);
+        }
+    }
+
+    async pushLocalProgressToSupabase(userId) {
+        if (!supabaseClient) return;
+        for (const [courseId, p] of Object.entries(this.state.progress)) {
+            await supabaseClient.from('course_progress').upsert({
+                user_id: userId,
+                course_id: courseId,
+                completed_lessons: p.completedLessons,
+                passed_quizzes: p.passedQuizzes,
+                completed: p.completed,
+                certificate_id: p.certificateId
+            });
+        }
+    }
+
+    async pushCourseProgress(courseId) {
+        if (!supabaseClient || !this.state.user || !this.state.user.id) return;
+        const p = this.state.progress[courseId];
+        if (!p) return;
+        try {
+            await supabaseClient.from('course_progress').upsert({
+                user_id: this.state.user.id,
+                course_id: courseId,
+                completed_lessons: p.completedLessons,
+                passed_quizzes: p.passedQuizzes,
+                completed: p.completed,
+                certificate_id: p.certificateId
+            });
+        } catch (e) {
+            console.error("Failed to push course progress:", e);
+        }
+    }
+
+    async pushCertificateToSupabase(cert) {
+        if (!supabaseClient || !this.state.user || !this.state.user.id) return;
+        try {
+            await supabaseClient.from('certificates').insert({
+                id: cert.uuid,
+                student_name: cert.studentName,
+                course_id: cert.courseId,
+                course_title: cert.courseTitle,
+                date: cert.date,
+                score: cert.score,
+                user_id: this.state.user.id
+            });
+        } catch (e) {
+            console.error("Failed to push certificate:", e);
+        }
+    }
+
+    save() {
+        localStorage.setItem('fasoclassroom_store', JSON.stringify(this.state));
+        this.notify();
+    }
+
+    getCourses() {
+        return [...COURSES, ...(this.state.customCourses || [])];
+    }
+
+    addCourse(course) {
+        if (!this.state.customCourses) {
+            this.state.customCourses = [];
+        }
+        this.state.customCourses.push(course);
+        this.save();
+    }
+
+    getMockStudentsData() {
+        const currentUser = this.getCurrentUser();
+        const currentUserName = currentUser ? currentUser.name : "Jean Dupont";
+        const currentUserEmail = currentUser ? currentUser.email : "jean.dupont@example.com";
+
+        const studentCoursesProgress = {};
+        this.getCourses().forEach(c => {
+            studentCoursesProgress[c.id] = {
+                title: c.title,
+                progress: this.getCourseProgress(c.id),
+                completed: this.getCourseState(c.id)?.completed || false,
+                examAttempts: this.getCourseState(c.id)?.examAttempts || [],
+                passedQuizzes: this.getCourseState(c.id)?.passedQuizzes || []
+            };
+        });
+
+        return [
+            {
+                id: "stud-1",
+                name: currentUserName,
+                email: currentUserEmail,
+                role: "Étudiant (Vous)",
+                courses: studentCoursesProgress
+            },
+            {
+                id: "stud-2",
+                name: "Marie Martin",
+                email: "marie.martin@example.com",
+                role: "Étudiant",
+                courses: {
+                    "course-air": {
+                        title: "Méthodes d'analyse de la qualité de l'air",
+                        progress: 100,
+                        completed: true,
+                        examAttempts: [0.8],
+                        passedQuizzes: ["quiz-air-mod1"]
+                    },
+                    "course-noise": {
+                        title: "Méthode d'analyse de la qualité du bruit et des vibrations",
+                        progress: 50,
+                        completed: false,
+                        examAttempts: [],
+                        passedQuizzes: []
+                    }
+                }
+            },
+            {
+                id: "stud-3",
+                name: "Lucas Bernard",
+                email: "lucas.bernard@example.com",
+                role: "Étudiant",
+                courses: {
+                    "course-air": {
+                        title: "Méthodes d'analyse de la qualité de l'air",
+                        progress: 16,
+                        completed: false,
+                        examAttempts: [],
+                        passedQuizzes: []
+                    },
+                    "course-safety": {
+                        title: "Normes et standards santé sécurité au travail",
+                        progress: 100,
+                        completed: true,
+                        examAttempts: [0.95],
+                        passedQuizzes: ["quiz-safety-mod1"]
+                    }
+                }
+            }
+        ];
+    }
+
+    subscribe(listener) {
+        this.listeners.push(listener);
+        return () => {
+            this.listeners = this.listeners.filter(l => l !== listener);
+        };
+    }
+
+    notify() {
+        this.listeners.forEach(listener => listener(this.state));
+    }
+
+    // --- Authentication ---
+    getCurrentUser() {
+        return this.state.user;
+    }
+
+    async checkEmailExists(email) {
+        if (!supabaseClient) return false;
+        try {
+            const { data } = await supabaseClient
+                .from('profiles')
+                .select('email')
+                .eq('email', email)
+                .maybeSingle();
+            return data !== null;
+        } catch (e) {
+            console.error("Failed to check email status in Supabase:", e);
+            return false;
+        }
+    }
+
+    async signInUser(email, password) {
+        if (!supabaseClient) {
+            // Offline/Mock fallback
+            this.loginMockUser(email.split('@')[0], email);
+            return { user: this.state.user };
+        }
+        
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        
+        await this.syncSupabaseUser(data.user);
+        return { user: this.state.user };
+    }
+
+    async signUpUser(email, password, name, role) {
+        if (!supabaseClient) {
+            // Offline/Mock fallback
+            this.loginMockUser(name, email);
+            this.state.user.role = role;
+            this.save();
+            return { user: this.state.user };
+        }
+        
+        const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    name: name,
+                    role: role
+                }
+            }
+        });
+        if (error) throw error;
+        
+        await this.syncSupabaseUser(data.user);
+        return { user: this.state.user };
+    }
+
+    loginMockUser(name = "Jean Dupont", email = "jean.dupont@example.com") {
+        this.state.user = { name, email, hasPaid: false };
+        
+        // Initialize progress for all courses if not existing
+        this.getCourses().forEach(c => {
+            if (!this.state.progress[c.id]) {
+                this.state.progress[c.id] = {
+                    completedLessons: [],
+                    passedQuizzes: [],
+                    examAttempts: [],
+                    completed: false,
+                    certificateId: null
+                };
+            }
+        });
+        
+        this.save();
+    }
+
+    hasPaid() {
+        return this.state.user && this.state.user.hasPaid;
+    }
+
+    async setPaid(status) {
+        if (this.state.user) {
+            this.state.user.hasPaid = status;
+            this.save();
+            
+            if (supabaseClient && this.state.user.id) {
+                try {
+                    await supabaseClient
+                        .from('profiles')
+                        .update({ has_paid: status })
+                        .eq('id', this.state.user.id);
+                } catch (e) {
+                    console.error("Failed to push payment status to Supabase:", e);
+                }
+            }
+        }
+    }
+
+    async logout() {
+        if (supabaseClient) {
+            await supabaseClient.auth.signOut();
+        }
+        this.state.user = null;
+        this.save();
+    }
+
+    // --- Course Progression Logic ---
+    getCourseProgress(courseId) {
+        const p = this.state.progress[courseId];
+        if (!p) return 0;
+        
+        const course = this.getCourses().find(c => c.id === courseId);
+        if (!course) return 0;
+
+        // Calculate total lessons
+        let total = 0;
+        course.modules.forEach(m => {
+            m.chapters.forEach(ch => {
+                total += ch.lessons.length;
+            });
+        });
+
+        if (total === 0) return 0;
+        const percent = Math.round((p.completedLessons.length / total) * 100);
+        return percent;
+    }
+
+    getCourseState(courseId) {
+        if (!this.state.progress[courseId]) {
+            this.state.progress[courseId] = {
+                completedLessons: [],
+                passedQuizzes: [],
+                examAttempts: [],
+                completed: false,
+                certificateId: null
+            };
+            this.save();
+        }
+        return this.state.progress[courseId];
+    }
+
+    // Check progressive unlock rules
+    isLessonUnlocked(courseId, lessonId) {
+        const p = this.state.progress[courseId];
+        if (!p) return false;
+
+        const course = this.getCourses().find(c => c.id === courseId);
+        if (!course) return false;
+
+        // Linearize all lessons and their modules in order
+        const flatLessons = [];
+        course.modules.forEach(m => {
+            m.chapters.forEach(ch => {
+                ch.lessons.forEach(l => {
+                    flatLessons.push({
+                        lessonId: l.id,
+                        moduleId: m.id,
+                        quizId: m.quiz?.quizId
+                    });
+                });
+            });
+        });
+
+        const targetIndex = flatLessons.findIndex(item => item.lessonId === lessonId);
+        if (targetIndex === -1) return false;
+        
+        // First lesson is always unlocked
+        if (targetIndex === 0) return true;
+
+        // Otherwise, the immediate previous lesson must be completed
+        const prevItem = flatLessons[targetIndex - 1];
+        const isPrevCompleted = p.completedLessons.includes(prevItem.lessonId);
+        if (!isPrevCompleted) return false;
+
+        // If the module changed, check if the previous module's quiz was passed
+        if (prevItem.moduleId !== flatLessons[targetIndex].moduleId) {
+            const hasPassedPrevQuiz = p.passedQuizzes.includes(prevItem.moduleId);
+            if (!hasPassedPrevQuiz) return false;
+        }
+
+        return true;
+    }
+
+    markLessonComplete(courseId, lessonId) {
+        const p = this.state.progress[courseId];
+        if (!p) return;
+
+        if (!p.completedLessons.includes(lessonId)) {
+            p.completedLessons.push(lessonId);
+            this.save();
+            this.pushCourseProgress(courseId);
+        }
+    }
+
+    // --- Quizzes ---
+    submitQuizResult(courseId, moduleId, passed) {
+        const p = this.state.progress[courseId];
+        if (!p) return;
+
+        if (passed) {
+            if (!p.passedQuizzes.includes(moduleId)) {
+                p.passedQuizzes.push(moduleId);
+                this.save();
+                this.pushCourseProgress(courseId);
+            }
+        }
+    }
+
+    hasPassedQuiz(courseId, moduleId) {
+        const p = this.state.progress[courseId];
+        return p ? p.passedQuizzes.includes(moduleId) : false;
+    }
+
+    // --- Secure Final Exam ---
+    submitExamResult(courseId, scoreFraction) {
+        const p = this.state.progress[courseId];
+        if (!p) return false;
+
+        const course = this.getCourses().find(c => c.id === courseId);
+        if (!course) return false;
+
+        p.examAttempts.push(scoreFraction);
+
+        const isPassed = scoreFraction >= course.exam.passingScore;
+        if (isPassed && !p.completed) {
+            p.completed = true;
+            // Generate a certificate
+            const certId = generateUUID();
+            p.certificateId = certId;
+
+            // Store certificate details
+            const certData = {
+                uuid: certId,
+                studentName: this.state.user.name,
+                courseId: course.id,
+                courseTitle: course.title,
+                date: new Date().toLocaleDateString('fr-FR'),
+                score: Math.round(scoreFraction * 100)
+            };
+            this.state.certificates[certId] = certData;
+            this.pushCertificateToSupabase(certData);
+        }
+        this.save();
+        this.pushCourseProgress(courseId);
+        return isPassed;
+    }
+
+    // --- Certificates ---
+    getCertificate(certId) {
+        return this.state.certificates[certId] || null;
+    }
+
+    getAllStudentCertificates() {
+        if (!this.state.user) return [];
+        return Object.values(this.state.certificates).filter(
+            c => c.studentName === this.state.user.name
+        );
+    }
+
+    async getRealStudentsData() {
+        if (!supabaseClient) return this.getMockStudentsData();
+        try {
+            // Fetch all profiles
+            const { data: profiles } = await supabaseClient
+                .from('profiles')
+                .select('*');
+                
+            if (!profiles) return this.getMockStudentsData();
+            
+            // Fetch all progressions
+            const { data: progresses } = await supabaseClient
+                .from('course_progress')
+                .select('*');
+                
+            const result = [];
+            
+            for (const profile of profiles) {
+                // Ignore admin/trainer profiles in the student list
+                if (profile.role === 'Formateur') continue;
+                
+                const studentCoursesProgress = {};
+                this.getCourses().forEach(c => {
+                    const studentProg = progresses ? progresses.find(p => p.user_id === profile.id && p.course_id === c.id) : null;
+                    
+                    let percent = 0;
+                    if (studentProg && studentProg.completed_lessons) {
+                        const totalLessons = c.modules.reduce((acc, m) => acc + m.chapters.reduce((acc2, ch) => acc2 + ch.lessons.length, 0), 0);
+                        if (totalLessons > 0) {
+                            percent = Math.round((studentProg.completed_lessons.length / totalLessons) * 100);
+                        }
+                    }
+                    
+                    studentCoursesProgress[c.id] = {
+                        title: c.title,
+                        progress: percent,
+                        completed: studentProg ? studentProg.completed : false,
+                        examAttempts: studentProg ? (studentProg.completed ? [1.0] : []) : [],
+                        passedQuizzes: studentProg ? studentProg.passed_quizzes || [] : []
+                    };
+                });
+                
+                result.push({
+                    id: profile.id,
+                    name: profile.name,
+                    email: profile.email,
+                    role: profile.role,
+                    courses: studentCoursesProgress
+                });
+            }
+            
+            return result;
+        } catch (e) {
+            console.error("Failed to load real student data:", e);
+            return this.getMockStudentsData();
+        }
+    }
+}
+
+const store = new Store();
+window.store = store;
+window.appStore = store;
+
+    </script>
+    <script>
+// COURSES et store sont accédés directement depuis le scope global
+
+// Global variables for active sessions
+let activeCourse = null;
+let activeLesson = null;
+let activeModule = null;
+let activeQuiz = null; 
+let activeQuizAnswers = []; 
+let currentQuestionIndex = 0;
+let examTimerInterval = null;
+let examTimeRemaining = 0;
+let cheatCount = 0;
+const MAX_CHEAT_ATTEMPTS = 3;
+let isExamActive = false;
+
+// Carousel State
+let carouselCurrentIndex = 0;
+
+// DOM Elements
+let pages = {};
+let sidebarLinks = [];
+let mainSidebar = null;
+let mobileSidebarToggle = null;
+let viewportTitle = null;
+let btnLoginSidebar = null;
+let profileCompact = null;
+let sidebarAvatar = null;
+let themeToggle = null;
+
+// Initialize Application
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
+
+function initApp() {
+    // Initialize DOM references dynamically
+    pages = {
+        dashboard: document.getElementById('page-dashboard'),
+        catalog: document.getElementById('page-catalog'),
+        player: document.getElementById('page-player'),
+        quiz: document.getElementById('page-quiz'),
+        verify: document.getElementById('page-verify'),
+        backoffice: document.getElementById('page-backoffice')
+    };
+
+    sidebarLinks = document.querySelectorAll('.sidebar-link');
+    mainSidebar = document.getElementById('main-sidebar');
+    mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+    viewportTitle = document.getElementById('viewport-title');
+    btnLoginSidebar = document.getElementById('btn-login-sidebar');
+    profileCompact = document.getElementById('profile-compact');
+    sidebarAvatar = document.getElementById('sidebar-avatar');
+    themeToggle = document.getElementById('theme-toggle');
+
+    setupTheme();
+    setupNavigation();
+    setupAuth();
+    setupCarousel();
+    checkUrlParams();
+
+    // Check active session status
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasParams = urlParams.has('page') || urlParams.has('certId');
+    const currentUser = store.getCurrentUser();
+    
+    updateUserUI();
+    
+    if (currentUser && hasParams) {
+        showAppShell();
+        
+        // Ensure default role
+        if (!currentUser.role) {
+            currentUser.role = "Étudiant";
+            store.save();
+        }
+        
+        if (currentUser.role === "Formateur") {
+            navigateTo('backoffice');
+        } else {
+            navigateTo('dashboard');
+        }
+        renderDashboard();
+    } else {
+        showLandingPage();
+    }
+}
+
+// ==========================================
+// THEME & STYLING
+// ==========================================
+function setupTheme() {
+    const savedTheme = localStorage.getItem('fasoclassroom_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('fasoclassroom_theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+}
+
+function updateThemeIcon(theme) {
+    if (theme === 'dark') {
+        themeToggle.innerHTML = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"></path></svg>`;
+    } else {
+        themeToggle.innerHTML = `<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`;
+    }
+}
+
+// ==========================================
+// NAVIGATION & ROUTING
+// ==========================================
+function setupNavigation() {
+    if (sidebarLinks && sidebarLinks.forEach) {
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageName = link.getAttribute('data-page');
+                navigateTo(pageName);
+                if (mainSidebar) mainSidebar.classList.remove('open'); // Close drawer on mobile click
+            });
+        });
+    }
+
+    // Mobile sidebar toggle
+    if (mobileSidebarToggle && mainSidebar) {
+        mobileSidebarToggle.addEventListener('click', () => {
+            mainSidebar.classList.toggle('open');
+        });
+    }
+
+    // Dashboard Banner button
+    const dashExploreBtn = document.getElementById('dash-explore-btn');
+    if (dashExploreBtn) {
+        dashExploreBtn.addEventListener('click', () => {
+            navigateTo('catalog');
+        });
+    }
+
+    // Handle course player back btn
+    const playerBackBtn = document.getElementById('player-back-btn');
+    if (playerBackBtn) {
+        playerBackBtn.addEventListener('click', () => {
+            navigateTo('dashboard');
+        });
+    }
+}
+
+function navigateTo(pageName, params = {}) {
+    if (isExamActive) {
+        if (!confirm("Attention : Quitter cette page annulera votre examen en cours. Êtes-vous sûr ?")) {
+            return;
+        }
+        stopExam(false);
+    }
+
+    // Hide all pages
+    Object.values(pages).forEach(p => {
+        if (p) p.classList.remove('active');
+    });
+    sidebarLinks.forEach(l => {
+        if (l) l.classList.remove('active');
+    });
+
+    // Show target page
+    if (pages[pageName]) {
+        pages[pageName].classList.add('active');
+    }
+
+    // Highlight menu
+    const targetLink = document.querySelector(`.sidebar-link[data-page="${pageName}"]`);
+    if (targetLink) {
+        targetLink.classList.add('active');
+    }
+
+    // Update Header Page Title
+    const pageTitles = {
+        dashboard: "Mon Tableau de bord",
+        catalog: "Catalogue des cours",
+        player: "Lecteur de cours",
+        quiz: "Évaluation",
+        verify: "Vérification de certificat",
+        backoffice: "Espace Formateur & Administration"
+    };
+    if (viewportTitle) {
+        viewportTitle.textContent = pageTitles[pageName] || "Fasoclassroom";
+    }
+
+    // Manage Sticky bottom player bar visibility
+    const stickyPlayerBar = document.getElementById('sticky-player-bar');
+    if (stickyPlayerBar) {
+        if (pageName === 'player') {
+            stickyPlayerBar.style.display = 'flex';
+        } else {
+            stickyPlayerBar.style.display = 'none';
+        }
+    }
+
+    // Custom updates
+    if (pageName === 'catalog') {
+        renderCatalog();
+    } else if (pageName === 'dashboard') {
+        renderDashboard();
+    } else if (pageName === 'verify') {
+        initVerifyPage(params.certId);
+    } else if (pageName === 'backoffice') {
+        initBackOfficePage();
+    }
+
+    // Update URL hash/query without reload
+    let newUrl = window.location.pathname;
+    if (pageName === 'verify' && params.certId) {
+        newUrl += `?page=verify&certId=${params.certId}`;
+    } else if (pageName !== 'dashboard') {
+        newUrl += `?page=${pageName}`;
+    }
+    window.history.pushState({}, '', newUrl);
+}
+
+function checkUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    const certId = urlParams.get('certId');
+
+    if (page === 'verify') {
+        navigateTo('verify', { certId });
+    } else if (page && pages[page]) {
+        navigateTo(page);
+    }
+}
+
+// ==========================================
+// AUTHENTICATION & LANDING CONTROLLERS
+// ==========================================
+function showLandingPage() {
+    document.getElementById('landing-container').style.display = 'block';
+    document.getElementById('auth-container').style.display = 'none';
+    document.querySelector('.app-shell').style.display = 'none';
+}
+
+function showAuthPage() {
+    document.getElementById('landing-container').style.display = 'none';
+    document.getElementById('auth-container').style.display = 'block';
+    document.querySelector('.app-shell').style.display = 'none';
+    showAuthEmailStep();
+}
+
+function showAppShell() {
+    document.getElementById('landing-container').style.display = 'none';
+    document.getElementById('auth-container').style.display = 'none';
+    document.querySelector('.app-shell').style.display = 'flex';
+    
+    const user = store.getCurrentUser();
+    if (user) {
+        if (user.role === "Formateur") {
+            navigateTo('backoffice');
+        } else {
+            navigateTo('dashboard');
+        }
+        renderDashboard();
+    }
+}
+
+window.showLandingPage = showLandingPage;
+window.showAuthPage = showAuthPage;
+window.showAppShell = showAppShell;
+
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+window.scrollToSection = scrollToSection;
+
+function showAuthEmailStep() {
+    document.getElementById('auth-step-email').style.display = 'block';
+    document.getElementById('auth-step-password').style.display = 'none';
+    document.getElementById('auth-step-register').style.display = 'none';
+    document.getElementById('auth-email').value = '';
+    document.getElementById('auth-password').value = '';
+    document.getElementById('auth-register-password').value = '';
+    document.getElementById('auth-title').textContent = "Bienvenue";
+    document.getElementById('auth-subtitle').textContent = "Connexion ou création de compte en 1 minute";
+}
+window.showAuthEmailStep = showAuthEmailStep;
+
+async function handleAuthEmail() {
+    const emailInput = document.getElementById('auth-email');
+    const email = emailInput.value.trim();
+    if (!email) {
+        alert("Veuillez saisir une adresse e-mail valide.");
+        return;
+    }
+
+    const btn = document.getElementById('btn-auth-email-continue');
+    const originalText = btn.textContent;
+    btn.textContent = "Vérification...";
+    btn.disabled = true;
+
+    try {
+        const exists = await store.checkEmailExists(email);
+        btn.textContent = originalText;
+        btn.disabled = false;
+
+        document.getElementById('auth-step-email').style.display = 'none';
+        if (exists) {
+            document.getElementById('auth-step-password').style.display = 'block';
+            document.getElementById('auth-title').textContent = "Connexion";
+            document.getElementById('auth-subtitle').textContent = "Saisissez votre mot de passe pour vous connecter";
+        } else {
+            document.getElementById('auth-step-register').style.display = 'block';
+            document.getElementById('auth-title').textContent = "Créer un compte";
+            document.getElementById('auth-subtitle').textContent = "Définissez vos informations de connexion";
+        }
+    } catch (e) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        alert("Erreur lors de la vérification : " + e.message);
+    }
+}
+window.handleAuthEmail = handleAuthEmail;
+
+async function handleAuthLoginWithPassword() {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    if (!password) {
+        alert("Veuillez saisir votre mot de passe.");
+        return;
+    }
+
+    const btn = document.getElementById('btn-auth-login-submit');
+    const originalText = btn.textContent;
+    btn.textContent = "Connexion...";
+    btn.disabled = true;
+
+    try {
+        await store.signInUser(email, password);
+        btn.textContent = originalText;
+        btn.disabled = false;
+
+        updateUserUI();
+        showAppShell();
+    } catch (e) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        alert("Erreur de connexion : " + e.message);
+    }
+}
+window.handleAuthLoginWithPassword = handleAuthLoginWithPassword;
+
+async function handleAuthRegister() {
+    const nameInput = document.getElementById('auth-name');
+    const passwordInput = document.getElementById('auth-register-password');
+    const roleSelect = document.getElementById('auth-role');
+    const email = document.getElementById('auth-email').value.trim();
+    const name = nameInput.value.trim();
+    const password = passwordInput.value;
+    const role = roleSelect.value;
+
+    if (!name) {
+        alert("Veuillez saisir votre nom complet.");
+        return;
+    }
+    if (!password || password.length < 6) {
+        alert("Le mot de passe doit contenir au moins 6 caractères.");
+        return;
+    }
+
+    const btn = document.getElementById('btn-auth-register-submit');
+    const originalText = btn.textContent;
+    btn.textContent = "Inscription...";
+    btn.disabled = true;
+
+    try {
+        await store.signUpUser(email, password, name, role);
+        btn.textContent = originalText;
+        btn.disabled = false;
+
+        updateUserUI();
+        showAppShell();
+    } catch (e) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        alert("Erreur lors de l'inscription : " + e.message);
+    }
+}
+window.handleAuthRegister = handleAuthRegister;
+
+function handleSocialLogin(provider) {
+    const name = provider + " User";
+    const email = provider.toLowerCase() + "@example.com";
+    
+    store.loginMockUser(name, email);
+    store.getCurrentUser().role = "Étudiant";
+    store.save();
+
+    updateUserUI();
+    showAppShell();
+    navigateTo('dashboard');
+}
+window.handleSocialLogin = handleSocialLogin;
+
+function setupAuth() {
+    if (btnLoginSidebar) {
+        btnLoginSidebar.addEventListener('click', async () => {
+            if (store.getCurrentUser()) {
+                await store.logout();
+                updateUserUI();
+                showLandingPage();
+            } else {
+                showAuthPage();
+            }
+        });
+    }
+
+    store.subscribe(() => {
+        updateUserUI();
+    });
+}
+
+function updateUserUI() {
+    const user = store.getCurrentUser();
+    const landingAuthContainer = document.getElementById('landing-auth-btn-container');
+    
+    if (user) {
+        // Update landing page header connection state
+        if (landingAuthContainer) {
+            landingAuthContainer.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 0.9rem; font-weight: 600; color: #1e1e1c;">Bonjour, ${user.name}</span>
+                    <button class="btn btn-primary" onclick="showAppShell()" style="background: #7451EB; border-color: #7451EB; font-size: 0.85rem; padding: 0.5rem 1rem;">Mon espace</button>
+                </div>
+            `;
+        }
+        
+        if (btnLoginSidebar) {
+            btnLoginSidebar.textContent = "Déconnexion";
+            btnLoginSidebar.className = "btn btn-outline";
+        }
+        if (profileCompact) profileCompact.style.display = "flex";
+        if (sidebarAvatar) sidebarAvatar.textContent = user.name.split(' ').map(n => n[0]).join('');
+        const nameEl = document.getElementById('sidebar-user-name');
+        if (nameEl) nameEl.textContent = user.name;
+        
+        // Hide/show back-office tab based on role
+        const sideBO = document.getElementById('side-backoffice');
+        if (sideBO) {
+            if (user.role === "Formateur") {
+                sideBO.style.display = "flex";
+            } else {
+                sideBO.style.display = "none";
+            }
+        }
+    } else {
+        // Restore landing page header connection button
+        if (landingAuthContainer) {
+            landingAuthContainer.innerHTML = `
+                <button class="btn btn-outline" onclick="showAuthPage()" style="border-color: #7451EB; color: #7451EB; font-size: 0.85rem; padding: 0.5rem 1rem;">Connexion</button>
+            `;
+        }
+        
+        if (btnLoginSidebar) {
+            btnLoginSidebar.textContent = "Connexion";
+            btnLoginSidebar.className = "btn btn-primary";
+        }
+        if (profileCompact) profileCompact.style.display = "none";
+    }
+}
+
+
+// ==========================================
+// PAGE 1: DASHBOARD & STATS & CAROUSEL
+// ==========================================
+function renderDashboard() {
+    const user = store.getCurrentUser();
+    if (!user) {
+        navigateTo('catalog');
+        return;
+    }
+
+    // Update enrollment dossier status dynamically based on payment status
+    const hasPaid = store.hasPaid();
+    const finalLine = document.getElementById('dossier-step-line-final');
+    const finalItem = document.getElementById('dossier-step-item-final');
+    const statusText = document.getElementById('dossier-status-text');
+    const actionBtn = document.getElementById('dossier-action-btn');
+    
+    if (hasPaid) {
+        if (finalLine) finalLine.className = 'step-line active';
+        if (finalItem) finalItem.className = 'step-item active';
+        if (statusText) statusText.textContent = "Félicitations, votre dossier d'inscription est finalisé et validé !";
+        if (actionBtn) {
+            actionBtn.textContent = "Dossier validé ✅";
+            actionBtn.disabled = true;
+            actionBtn.style.background = '#25d366';
+            actionBtn.style.borderColor = '#25d366';
+            actionBtn.onclick = null;
+        }
+    } else {
+        if (finalLine) finalLine.className = 'step-line';
+        if (finalItem) finalItem.className = 'step-item';
+        if (statusText) statusText.textContent = "Votre dossier est complété à 66%. Finalisez-le pour accéder à vos cours officiels.";
+        if (actionBtn) {
+            actionBtn.textContent = "Finaliser et Payer (15 000 FCFA)";
+            actionBtn.disabled = false;
+            actionBtn.style.background = '#7451EB';
+            actionBtn.style.borderColor = '#7451EB';
+            actionBtn.onclick = () => openCheckoutModal();
+        }
+    }
+
+    // Compute Statistics
+    let startedCount = 0;
+    let completedCount = 0;
+    let completedLessonsCount = 0;
+
+    store.getCourses().forEach(course => {
+        const p = store.getCourseState(course.id);
+        if (p) {
+            if (p.completedLessons.length > 0) startedCount++;
+            if (p.completed) completedCount++;
+            completedLessonsCount += p.completedLessons.length;
+        }
+    });
+
+    // Populate statistics UI
+    document.getElementById('stat-hours').textContent = 10 + (completedLessonsCount * 2); // Simulated hours
+    document.getElementById('stat-lessons-completed').textContent = completedLessonsCount;
+    document.getElementById('stat-certs-unlocked').textContent = completedCount;
+
+    // Render Active Courses List
+    const activeContainer = document.getElementById('active-courses-container');
+    activeContainer.innerHTML = '';
+
+    let hasActive = false;
+    store.getCourses().forEach(course => {
+        const p = store.getCourseState(course.id);
+        if (p && p.completedLessons.length > 0 && !p.completed) {
+            hasActive = true;
+            const percent = store.getCourseProgress(course.id);
+            
+            const activeItem = document.createElement('div');
+            activeItem.className = "progress-item";
+            activeItem.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <strong style="font-size: 0.95rem;">${course.title}</strong>
+                    <span style="font-size: 0.85rem; color: var(--accent); font-weight: 700;">${percent}%</span>
+                </div>
+                <div class="progress-bar-container" style="margin-bottom: 0.8rem;">
+                    <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+                </div>
+                <button class="btn btn-primary resume-btn" data-id="${course.id}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                    Reprendre le cours
+                </button>
+            `;
+            activeItem.querySelector('.resume-btn').addEventListener('click', () => {
+                startCourse(course.id);
+            });
+            activeContainer.appendChild(activeItem);
+        }
+    });
+
+    if (!hasActive && activeContainer) {
+        activeContainer.innerHTML = `
+            <div style="text-align: center; padding: 1.5rem 0;">
+                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1rem;">Vous n'avez aucun cours actif.</p>
+                <button class="btn btn-outline" id="dash-empty-explore" style="font-size: 0.75rem;">Découvrir les formations</button>
+            </div>
+        `;
+        const btnEmptyExplore = activeContainer.querySelector('#dash-empty-explore');
+        if (btnEmptyExplore) {
+            btnEmptyExplore.addEventListener('click', () => {
+                navigateTo('catalog');
+            });
+        }
+    }
+
+    // Render Certificates List
+    const certsContainer = document.getElementById('dashboard-certs-container');
+    certsContainer.innerHTML = '';
+    
+    const studentCerts = store.getAllStudentCertificates();
+    if (studentCerts.length > 0) {
+        studentCerts.forEach(cert => {
+            const certItem = document.createElement('div');
+            certItem.className = "cert-item";
+            certItem.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); margin-bottom: 0.5rem;";
+            certItem.innerHTML = `
+                <div>
+                    <strong style="display: block; font-size: 0.85rem;">${cert.courseTitle}</strong>
+                    <span style="font-size: 0.7rem; color: var(--text-dim);">Délivré le : ${cert.date}</span>
+                </div>
+                <button class="btn btn-outline view-cert-btn" style="padding: 0.35rem 0.7rem; font-size: 0.7rem;">
+                    Voir PDF
+                </button>
+            `;
+            certItem.querySelector('.view-cert-btn').addEventListener('click', () => {
+                navigateTo('verify', { certId: cert.uuid });
+            });
+            certsContainer.appendChild(certItem);
+        });
+    } else {
+        certsContainer.innerHTML = `<p style="color: var(--text-dim); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Aucun certificat obtenu pour le moment.</p>`;
+    }
+
+    // Update recommended carousel track
+    renderCarouselItems();
+}
+
+// Recommended Carousel logic
+function setupCarousel() {
+    const btnPrev = document.getElementById('carousel-prev');
+    const btnNext = document.getElementById('carousel-next');
+    const track = document.getElementById('recommended-carousel-track');
+
+    if (btnPrev && btnNext && track) {
+        btnPrev.addEventListener('click', () => {
+            if (carouselCurrentIndex > 0) {
+                carouselCurrentIndex--;
+                updateCarouselOffset();
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            const cardsCount = track.children.length;
+            if (carouselCurrentIndex < cardsCount - 1) {
+                carouselCurrentIndex++;
+                updateCarouselOffset();
+            }
+        });
+    }
+}
+
+function renderCarouselItems() {
+    const track = document.getElementById('recommended-carousel-track');
+    track.innerHTML = '';
+
+    store.getCourses().forEach(course => {
+        const card = document.createElement('div');
+        card.className = "card carousel-card";
+        card.style.background = `linear-gradient(135deg, hsla(252, 80%, 30%, 0.15), var(--bg-card))`;
+        card.innerHTML = `
+            <div>
+                <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">Recommandé</span>
+                <h4 style="font-size: 1rem; margin-top: 0.4rem; line-height: 1.3;">${course.title}</h4>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <span style="font-size: 0.75rem; color: var(--text-dim);">⏱️ ${course.duration}</span>
+                <button class="btn btn-primary start-carousel-btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; box-shadow: none;">
+                    Découvrir
+                </button>
+            </div>
+        `;
+
+        card.querySelector('.start-carousel-btn').addEventListener('click', () => {
+            navigateTo('catalog');
+        });
+
+        track.appendChild(card);
+    });
+
+    carouselCurrentIndex = 0;
+    updateCarouselOffset();
+}
+
+function updateCarouselOffset() {
+    const track = document.getElementById('recommended-carousel-track');
+    if (track.children.length === 0) return;
+    const cardWidth = 250 + 16; // width + gap
+    track.style.transform = `translateX(-${carouselCurrentIndex * cardWidth}px)`;
+}
+
+// ==========================================
+// PAGE 2: CATALOGUE
+// ==========================================
+function renderCatalog() {
+    const container = document.getElementById('catalog-courses-container');
+    container.innerHTML = '';
+
+    // Search filter setup
+    const searchInput = document.getElementById('catalog-search');
+    searchInput.oninput = () => {
+        filterCatalogCourses(searchInput.value.toLowerCase());
+    };
+
+    filterCatalogCourses('');
+}
+
+function filterCatalogCourses(filterText) {
+    const container = document.getElementById('catalog-courses-container');
+    container.innerHTML = '';
+
+    const filtered = store.getCourses().filter(c => 
+        c.title.toLowerCase().includes(filterText) || 
+        c.description.toLowerCase().includes(filterText)
+    );
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-dim); padding: 2rem;">Aucun cours ne correspond à votre recherche.</p>`;
+        return;
+    }
+
+    filtered.forEach(course => {
+        const progressState = store.getCourseState(course.id);
+        const percent = store.getCourseProgress(course.id);
+        
+        let actionBtnText = "Commencer la formation";
+        let actionClass = "btn-primary";
+        
+        if (progressState) {
+            if (progressState.completed) {
+                actionBtnText = "Certifié - Voir Certificat";
+                actionClass = "btn-outline";
+            } else if (percent > 0) {
+                actionBtnText = `Continuer (${percent}%)`;
+                actionClass = "btn-primary";
+            }
+        }
+
+        const coverImg = 'assets/' + course.id.replace('-', '_') + '_cover.jpg';
+
+        const card = document.createElement('div');
+        card.className = "card course-card";
+        card.innerHTML = `
+            <div class="course-thumbnail" style="height: 140px; border-radius: var(--radius-md); margin-bottom: 1rem; overflow: hidden; border: 1px solid var(--border-color);">
+                <img src="${coverImg}" alt="${course.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <span class="course-badge lvl-${course.level}">${course.levelText}</span>
+            <h3 class="course-title">${course.title}</h3>
+            <p class="course-desc">${course.description}</p>
+            <div class="course-meta" style="margin-bottom: 1.2rem;">
+                <span>⏱️ ${course.duration}</span>
+                <span>📚 ${course.lessonsCount} leçons</span>
+            </div>
+            <button class="btn ${actionClass} start-course-btn" data-id="${course.id}" style="width: 100%; justify-content: center;">
+                ${actionBtnText}
+            </button>
+        `;
+
+        card.querySelector('.start-course-btn').addEventListener('click', () => {
+            if (!store.getCurrentUser()) {
+                store.loginMockUser();
+            }
+
+            if (progressState && progressState.completed) {
+                navigateTo('verify', { certId: progressState.certificateId });
+            } else {
+                startCourse(course.id);
+            }
+        });
+
+        container.appendChild(card);
+    });
+}
+
+// ==========================================
+// PAGE 3: COURSE PLAYER & STICKY BOTTOM BAR
+// ==========================================
+function startCourse(courseId) {
+    activeCourse = store.getCourses().find(c => c.id === courseId);
+    if (!activeCourse) return;
+
+    navigateTo('player');
+
+    // Update sticky bottom course title
+    document.getElementById('sticky-course-title').textContent = activeCourse.title;
+
+    // Build sidebar tree navigation
+    renderPlayerSidebar();
+
+    // Auto-open first incomplete lesson
+    let targetLesson = null;
+    const progress = store.getCourseState(courseId);
+
+    outerLoop:
+    for (const mod of activeCourse.modules) {
+        for (const chap of mod.chapters) {
+            for (const les of chap.lessons) {
+                if (!progress.completedLessons.includes(les.id) && store.isLessonUnlocked(courseId, les.id)) {
+                    targetLesson = les;
+                    activeModule = mod;
+                    break outerLoop;
+                }
+            }
+        }
+    }
+
+    if (!targetLesson && activeCourse.modules[0]?.chapters[0]?.lessons[0]) {
+        targetLesson = activeCourse.modules[0].chapters[0].lessons[0];
+        activeModule = activeCourse.modules[0];
+    }
+
+    if (targetLesson) {
+        loadLesson(targetLesson);
+    }
+}
+
+function updateStickyBarUI() {
+    const percent = store.getCourseProgress(activeCourse.id);
+    document.getElementById('sticky-progress-fill').style.width = `${percent}%`;
+    document.getElementById('sticky-progress-text').textContent = `Progression : ${percent}%`;
+    document.getElementById('sticky-lesson-title').textContent = activeLesson ? activeLesson.title : '';
+}
+
+function renderPlayerSidebar() {
+    const accordion = document.getElementById('player-modules-accordion');
+    accordion.innerHTML = '';
+
+    activeCourse.modules.forEach(mod => {
+        const modContainer = document.createElement('div');
+        modContainer.className = "module-accordion";
+
+        const hasPassedQuiz = store.hasPassedQuiz(activeCourse.id, mod.id);
+        const quizStatusIcon = hasPassedQuiz ? ' ✅' : '';
+
+        let lessons = [];
+        mod.chapters.forEach(ch => {
+            lessons = lessons.concat(ch.lessons);
+        });
+
+        const progress = store.getCourseState(activeCourse.id);
+        const completedCount = lessons.filter(l => progress.completedLessons.includes(l.id)).length;
+        const allCompleted = completedCount === lessons.length;
+
+        modContainer.innerHTML = `
+            <div class="module-header">
+                <div>
+                    <span style="display: block; font-size: 0.75rem; color: var(--primary-light);">Module</span>
+                    <span>${mod.title}</span>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--text-dim);">${completedCount}/${lessons.length}${quizStatusIcon}</span>
+            </div>
+            <ul class="module-lessons"></ul>
+        `;
+
+        const lessonsList = modContainer.querySelector('.module-lessons');
+
+        mod.chapters.forEach(chap => {
+            const chapTitle = document.createElement('li');
+            chapTitle.style.cssText = "padding: 0.4rem 1rem; font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; background: rgba(255,255,255,0.01);";
+            chapTitle.textContent = chap.title;
+            lessonsList.appendChild(chapTitle);
+
+            chap.lessons.forEach(lesson => {
+                const isUnlocked = store.isLessonUnlocked(activeCourse.id, lesson.id);
+                const isCompleted = progress.completedLessons.includes(lesson.id);
+
+                const item = document.createElement('li');
+                item.className = `lesson-item ${!isUnlocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''} ${activeLesson?.id === lesson.id ? 'active' : ''}`;
+                
+                const icon = lesson.type === 'video' ? '📹' : (lesson.type === 'exercise' ? '💻' : '📄');
+                item.innerHTML = `
+                    <span class="lesson-status"></span>
+                    <span style="flex-grow: 1;">${icon} ${lesson.title}</span>
+                    <span style="font-size: 0.7rem; color: var(--text-dim);">${lesson.duration}</span>
+                `;
+
+                if (isUnlocked) {
+                    item.addEventListener('click', () => {
+                        activeModule = mod;
+                        loadLesson(lesson);
+                    });
+                }
+
+                lessonsList.appendChild(item);
+            });
+        });
+
+        // Add Quiz link
+        if (mod.quiz) {
+            const quizItem = document.createElement('li');
+            const isQuizUnlocked = allCompleted; 
+            
+            quizItem.className = `lesson-item ${!isQuizUnlocked ? 'locked' : ''} ${hasPassedQuiz ? 'completed' : ''}`;
+            quizItem.innerHTML = `
+                <span class="lesson-status" style="border-radius: 2px;"></span>
+                <span style="flex-grow: 1; font-weight: 600; color: var(--primary-light);">📝 Évaluation : ${mod.quiz.title}</span>
+            `;
+
+            if (isQuizUnlocked) {
+                quizItem.addEventListener('click', () => {
+                    startQuiz(mod.quiz, mod);
+                });
+            }
+            lessonsList.appendChild(quizItem);
+        }
+
+        accordion.appendChild(modContainer);
+    });
+
+    // Add Final Exam section
+    const progress = store.getCourseState(activeCourse.id);
+    const totalModulesCount = activeCourse.modules.length;
+    const passedQuizzesCount = progress.passedQuizzes.length;
+    const examUnlocked = passedQuizzesCount === totalModulesCount;
+    
+    const examHeader = document.createElement('div');
+    examHeader.className = "module-accordion";
+    examHeader.style.marginTop = "1rem";
+    examHeader.innerHTML = `
+        <div class="module-header" id="sidebar-exam-btn" style="background: ${examUnlocked ? 'var(--primary-glow)' : 'rgba(0,0,0,0.1)'}; border: 1px solid ${examUnlocked ? 'var(--primary)' : 'transparent'}; cursor: ${examUnlocked ? 'pointer' : 'not-allowed'}; opacity: ${examUnlocked ? '1' : '0.5'};">
+            <div style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                <span style="font-size: 1.1rem;">🎓</span>
+                <div style="flex-grow: 1;">
+                    <span style="display: block; font-size: 0.7rem; color: var(--warning); font-weight: 700; text-transform: uppercase;">Examen de Certification</span>
+                    <span style="font-size: 0.8rem;">Lancer l'épreuve</span>
+                </div>
+                <span style="font-size: 1rem;">🔒</span>
+            </div>
+        </div>
+    `;
+
+    if (examUnlocked) {
+        examHeader.querySelector('#sidebar-exam-btn').addEventListener('click', () => {
+            startQuiz(activeCourse.exam, null, true);
+        });
+    }
+    accordion.appendChild(examHeader);
+}
+
+function loadLesson(lesson) {
+    activeLesson = lesson;
+    updatePlayerSidebarActiveState();
+    updateStickyBarUI();
+
+    const viewer = document.getElementById('lesson-content-viewer');
+    viewer.innerHTML = '';
+
+    const header = document.createElement('div');
+    header.style.marginBottom = '1.5rem';
+    
+    let badgeText = "Fiche de cours";
+    if (lesson.type === 'video') badgeText = "Vidéo";
+    if (lesson.type === 'exercise') badgeText = "Exercice pratique";
+
+    header.innerHTML = `
+        <span class="course-badge" style="margin-bottom: 0.5rem;">${badgeText}</span>
+        <h2 style="margin: 0; font-size: 1.5rem;">${lesson.title}</h2>
+    `;
+    viewer.appendChild(header);
+
+    if (lesson.type === 'video') {
+        const videoWrapper = document.createElement('div');
+        videoWrapper.className = "content-video-wrapper";
+        videoWrapper.innerHTML = `
+            <iframe src="${lesson.videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        `;
+        viewer.appendChild(videoWrapper);
+    }
+
+    const body = document.createElement('div');
+    body.className = "content-body";
+    body.innerHTML = lesson.type === 'exercise' ? lesson.instructions : lesson.content;
+    viewer.appendChild(body);
+
+    if (lesson.type === 'document' && lesson.documentUrl) {
+        const downloadBox = document.createElement('div');
+        downloadBox.style.cssText = "margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-color); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center;";
+        downloadBox.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">📄</span>
+                <div>
+                    <strong style="display: block; font-size: 0.9rem;">${lesson.documentUrl}</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-dim);">Fiche récapitulative de cours</span>
+                </div>
+            </div>
+            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;" onclick="alert('Document téléchargé !')">
+                Télécharger PDF
+            </button>
+        `;
+        viewer.appendChild(downloadBox);
+    }
+
+    if (lesson.type === 'exercise') {
+        const sandbox = document.createElement('div');
+        sandbox.className = "code-sandbox-container";
+        sandbox.innerHTML = `
+            <div class="editor-header-bar">
+                <div class="mac-buttons">
+                    <div class="mac-dot red"></div>
+                    <div class="mac-dot yellow"></div>
+                    <div class="mac-dot green"></div>
+                </div>
+                <div class="editor-tab-title">${lesson.id.includes('saas') ? 'isolation.sql' : 'srp_refactoring.js'}</div>
+            </div>
+            <textarea class="code-editor-textarea" id="sandbox-textarea" spellcheck="false" placeholder="Écrivez votre code ici..."></textarea>
+            <div class="sandbox-console-box" id="sandbox-console">
+                <div class="console-output-line">> Prêt pour l'évaluation. Saisissez votre code ci-dessus.</div>
+            </div>
+            <div class="sandbox-actions-bar">
+                <button class="btn btn-outline" id="btn-sandbox-hint" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;">Indice</button>
+                <button class="btn btn-primary" id="btn-sandbox-run" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;">Lancer les tests</button>
+            </div>
+        `;
+        viewer.appendChild(sandbox);
+
+        const textarea = sandbox.querySelector('#sandbox-textarea');
+        const consoleBox = sandbox.querySelector('#sandbox-console');
+        const btnHint = sandbox.querySelector('#btn-sandbox-hint');
+        const btnRun = sandbox.querySelector('#btn-sandbox-run');
+
+        textarea.value = lesson.starterCode;
+
+        btnHint.onclick = () => {
+            consoleBox.innerHTML = `<div class="console-output-line">> Indice : ${lesson.hint}</div>`;
+        };
+
+        btnRun.onclick = () => {
+            const code = textarea.value.trim();
+            const regex = new RegExp(lesson.solutionPattern, 'i');
+            
+            if (regex.test(code)) {
+                consoleBox.innerHTML = `
+                    <div class="console-output-line success">> ✓ Tous les tests ont été validés avec succès !</div>
+                    <div class="console-output-line success">> Exercice réussi. Vous pouvez cliquer sur le bouton de complétion.</div>
+                `;
+                textarea.setAttribute('data-passed', 'true');
+                setupStickyNavigationButtons(); 
+            } else {
+                consoleBox.innerHTML = `
+                    <div class="console-output-line error">> ✕ Échec des tests.</div>
+                    <div class="console-output-line error">> La vérification automatique a échoué. Corrigez le code et réessayez.</div>
+                `;
+                textarea.removeAttribute('data-passed');
+                setupStickyNavigationButtons();
+            }
+        };
+    }
+
+    // Configure sticky bottom bar buttons
+    setupStickyNavigationButtons();
+}
+
+function updatePlayerSidebarActiveState() {
+    document.querySelectorAll('.lesson-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    renderPlayerSidebar();
+}
+
+function setupStickyNavigationButtons() {
+    const btnStickyPrev = document.getElementById('btn-sticky-prev');
+    const btnStickyNext = document.getElementById('btn-sticky-next');
+
+    // Linear list of lessons
+    const lessons = [];
+    activeCourse.modules.forEach(m => {
+        m.chapters.forEach(ch => {
+            lessons.push(...ch.lessons);
+        });
+    });
+
+    const index = lessons.findIndex(l => l.id === activeLesson.id);
+
+    // Prev Button
+    if (index > 0) {
+        btnStickyPrev.style.display = 'inline-flex';
+        btnStickyPrev.onclick = () => {
+            loadLesson(lessons[index - 1]);
+        };
+    } else {
+        btnStickyPrev.style.display = 'none';
+    }
+
+    // Next / Complete Button
+    const progress = store.getCourseState(activeCourse.id);
+    const isCompleted = progress.completedLessons.includes(activeLesson.id);
+
+    if (!isCompleted) {
+        btnStickyNext.textContent = "Marquer terminé";
+        btnStickyNext.className = "btn btn-primary";
+        btnStickyNext.onclick = () => {
+            // If active lesson is exercise, check if passed
+            if (activeLesson.type === 'exercise') {
+                const textarea = document.getElementById('sandbox-textarea');
+                if (!textarea || textarea.getAttribute('data-passed') !== 'true') {
+                    alert("Veuillez d'abord réussir l'exercice en cliquant sur 'Lancer les tests' !");
+                    return;
+                }
+            }
+            
+            store.markLessonComplete(activeCourse.id, activeLesson.id);
+            updateStickyBarUI();
+            
+            // Advance
+            if (index < lessons.length - 1) {
+                const nextLesson = lessons[index + 1];
+                if (store.isLessonUnlocked(activeCourse.id, nextLesson.id)) {
+                    loadLesson(nextLesson);
+                } else {
+                    alert("Module complété ! Veuillez valider l'évaluation pour accéder aux chapitres suivants.");
+                    renderPlayerSidebar();
+                }
+            } else {
+                alert("Bravo ! Vous avez terminé toutes les leçons de ce cours. Lancez l'examen final de certification dans la barre latérale pour obtenir votre diplôme !");
+                renderPlayerSidebar();
+            }
+        };
+    } else {
+        btnStickyNext.textContent = "Leçon suivante →";
+        btnStickyNext.className = "btn btn-outline";
+        if (index < lessons.length - 1) {
+            btnStickyNext.style.display = 'inline-flex';
+            btnStickyNext.onclick = () => {
+                const nextLesson = lessons[index + 1];
+                if (store.isLessonUnlocked(activeCourse.id, nextLesson.id)) {
+                    loadLesson(nextLesson);
+                } else {
+                    alert("Veuillez d'abord valider l'évaluation intermédiaire pour débloquer la suite.");
+                }
+            };
+        } else {
+            btnStickyNext.style.display = 'none';
+        }
+    }
+}
+
+// ==========================================
+// PAGE 4: QUIZ & SECURE FINAL EXAM
+// ==========================================
+function startQuiz(quizData, parentModule = null, isFinalExam = false) {
+    activeQuiz = quizData;
+    activeModule = parentModule;
+    isExamActive = isFinalExam;
+    
+    currentQuestionIndex = 0;
+    activeQuizAnswers = new Array(quizData.questions.length).fill(null);
+    cheatCount = 0;
+
+    navigateTo('quiz');
+
+    document.getElementById('quiz-title').textContent = quizData.title;
+    document.getElementById('quiz-question-box').style.display = 'block';
+    document.getElementById('quiz-results-box').style.display = 'none';
+
+    const cheatAlert = document.getElementById('cheat-alert-box');
+    cheatAlert.style.display = 'none';
+
+    // Timer setup
+    const timerContainer = document.getElementById('quiz-timer-container');
+    if (isFinalExam && quizData.timeLimit) {
+        timerContainer.style.display = 'block';
+        examTimeRemaining = quizData.timeLimit;
+        updateTimerDisplay();
+        
+        clearInterval(examTimerInterval);
+        examTimerInterval = setInterval(() => {
+            examTimeRemaining--;
+            updateTimerDisplay();
+            if (examTimeRemaining <= 0) {
+                clearInterval(examTimerInterval);
+                alert("Temps écoulé ! Examen soumis automatiquement.");
+                submitQuiz();
+            }
+        }, 1000);
+
+        requestFullScreen();
+        setupExamSecurity();
+    } else {
+        timerContainer.style.display = 'none';
+        clearInterval(examTimerInterval);
+    }
+
+    loadQuizQuestion();
+}
+
+function updateTimerDisplay() {
+    const mins = Math.floor(examTimeRemaining / 60);
+    const secs = examTimeRemaining % 60;
+    document.getElementById('quiz-time-left').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function loadQuizQuestion() {
+    const qText = document.getElementById('quiz-progress-text');
+    const qProgressBar = document.getElementById('quiz-progress-bar');
+    const qBody = document.getElementById('question-text-container');
+    const optionsContainer = document.getElementById('options-container');
+
+    const totalQuestions = activeQuiz.questions.length;
+    const question = activeQuiz.questions[currentQuestionIndex];
+
+    qText.textContent = `Question ${currentQuestionIndex + 1} sur ${totalQuestions}`;
+    qProgressBar.style.width = `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`;
+    qBody.textContent = question.text;
+
+    optionsContainer.innerHTML = '';
+    question.options.forEach((opt, idx) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = `option-btn ${activeQuizAnswers[currentQuestionIndex] === idx ? 'selected' : ''}`;
+        btn.innerHTML = `<span style="font-weight: 700; color: var(--primary); margin-right: 0.5rem;">${String.fromCharCode(65 + idx)}.</span> ${opt}`;
+        
+        btn.onclick = () => {
+            activeQuizAnswers[currentQuestionIndex] = idx;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        };
+
+        li.appendChild(btn);
+        optionsContainer.appendChild(li);
+    });
+
+    const btnSubmit = document.getElementById('btn-submit-question');
+    if (currentQuestionIndex === totalQuestions - 1) {
+        btnSubmit.textContent = isExamActive ? "Terminer l'examen" : "Soumettre";
+    } else {
+        btnSubmit.textContent = "Suivant";
+    }
+
+    btnSubmit.onclick = () => {
+        if (activeQuizAnswers[currentQuestionIndex] === null) {
+            alert("Veuillez sélectionner une réponse.");
+            return;
+        }
+
+        if (currentQuestionIndex < totalQuestions - 1) {
+            currentQuestionIndex++;
+            loadQuizQuestion();
+        } else {
+            submitQuiz();
+        }
+    };
+}
+
+function submitQuiz() {
+    clearInterval(examTimerInterval);
+    isExamActive = false;
+
+    // Remove anti-cheat events
+    document.removeEventListener('visibilitychange', handleVisibilityCheat);
+    window.removeEventListener('blur', handleBlurCheat);
+
+    let correctCount = 0;
+    activeQuiz.questions.forEach((q, idx) => {
+        if (activeQuizAnswers[idx] === q.answer) {
+            correctCount++;
+        }
+    });
+
+    const totalQuestions = activeQuiz.questions.length;
+    const scoreFraction = correctCount / totalQuestions;
+    const scorePercent = Math.round(scoreFraction * 100);
+    const isPassed = scoreFraction >= activeQuiz.passingScore;
+
+    document.getElementById('quiz-question-box').style.display = 'none';
+    const resultsBox = document.getElementById('quiz-results-box');
+    resultsBox.style.display = 'block';
+
+    const scoreCircle = document.getElementById('result-score-circle');
+    const titleEl = document.getElementById('result-title');
+    const textEl = document.getElementById('result-text');
+    const btnRetry = document.getElementById('btn-quiz-retry');
+    const btnContinue = document.getElementById('btn-quiz-continue');
+    const btnViewCert = document.getElementById('btn-quiz-view-cert');
+
+    document.getElementById('result-score-percent').textContent = `${scorePercent}%`;
+    document.getElementById('result-score-fraction').textContent = `${correctCount} / ${totalQuestions}`;
+
+    btnViewCert.style.display = 'none';
+
+    if (isPassed) {
+        scoreCircle.className = "results-score-circle passed";
+        titleEl.textContent = "Évaluation validée ! 🎉";
+        titleEl.style.color = "var(--success)";
+        
+        if (activeModule) {
+            textEl.textContent = `Excellent ! Vous avez validé ce module avec un score de ${scorePercent}%. Le module suivant est débloqué.`;
+            store.submitQuizResult(activeCourse.id, activeModule.id, true);
+            btnRetry.style.display = 'none';
+            btnContinue.onclick = () => {
+                startCourse(activeCourse.id);
+            };
+        } else {
+            store.submitExamResult(activeCourse.id, scoreFraction);
+            const state = store.getCourseState(activeCourse.id);
+            textEl.textContent = `Félicitations ! Vous avez validé l'examen final de "${activeCourse.title}". Votre certificat de réussite est disponible.`;
+            btnRetry.style.display = 'none';
+            btnContinue.onclick = () => { navigateTo('dashboard'); };
+            
+            if (state.certificateId) {
+                btnViewCert.style.display = 'inline-flex';
+                btnViewCert.onclick = () => {
+                    navigateTo('verify', { certId: state.certificateId });
+                };
+            }
+        }
+    } else {
+        scoreCircle.className = "results-score-circle failed";
+        titleEl.textContent = "Échec de validation";
+        titleEl.style.color = "var(--danger)";
+        
+        textEl.textContent = `Vous avez obtenu un score de ${scorePercent}%. Un score minimal de ${Math.round(activeQuiz.passingScore * 100)}% est exigé pour valider cette étape.`;
+        
+        btnRetry.style.display = 'inline-flex';
+        btnRetry.onclick = () => {
+            startQuiz(activeQuiz, activeModule, activeModule === null);
+        };
+
+        btnContinue.textContent = "Retourner aux chapitres";
+        btnContinue.onclick = () => {
+            if (activeCourse) {
+                startCourse(activeCourse.id);
+            } else {
+                navigateTo('catalog');
+            }
+        };
+
+        if (activeModule === null) {
+            store.submitExamResult(activeCourse.id, scoreFraction);
+        }
+    }
+}
+
+// ==========================================
+// ANTI-CHEAT SIMULATION
+// ==========================================
+function setupExamSecurity() {
+    document.addEventListener('visibilitychange', handleVisibilityCheat);
+    window.addEventListener('blur', handleBlurCheat);
+}
+
+function handleVisibilityCheat() {
+    if (document.visibilityState === 'hidden') {
+        registerCheatAttempt("Changement d'onglet.");
+    }
+}
+
+function handleBlurCheat() {
+    registerCheatAttempt("Perte de focus de la fenêtre.");
+}
+
+function registerCheatAttempt(reason) {
+    if (!isExamActive) return;
+    
+    cheatCount++;
+    const alertBox = document.getElementById('cheat-alert-box');
+    alertBox.style.display = 'block';
+    
+    const remaining = MAX_CHEAT_ATTEMPTS - cheatCount;
+    document.getElementById('cheat-remaining-attempts').textContent = remaining;
+
+    if (cheatCount >= MAX_CHEAT_ATTEMPTS) {
+        alert("ALERTE SÉCURITÉ : Tentatives de triche excessives. Examen annulé.");
+        stopExam(false);
+    }
+}
+
+function stopExam(saveScore = false) {
+    clearInterval(examTimerInterval);
+    isExamActive = false;
+    document.removeEventListener('visibilitychange', handleVisibilityCheat);
+    window.removeEventListener('blur', handleBlurCheat);
+    exitFullScreen();
+
+    if (!saveScore) {
+        store.submitExamResult(activeCourse.id, 0);
+        navigateTo('player');
+        alert("Examen annulé pour non-respect des règles de sécurité.");
+    }
+}
+
+function requestFullScreen() {
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(err => console.log("Fullscreen error", err));
+    }
+}
+
+function exitFullScreen() {
+    if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen();
+    }
+}
+
+// ==========================================
+// CERTIFICATE VERIFICATION
+// ==========================================
+function initVerifyPage(prefilledCertId) {
+    const input = document.getElementById('cert-verify-input');
+    const btnVerif = document.getElementById('btn-run-verification');
+    const resultCard = document.getElementById('verification-result-card');
+    const errorCard = document.getElementById('verification-error-card');
+
+    resultCard.style.display = 'none';
+    errorCard.style.display = 'none';
+
+    if (prefilledCertId) {
+        input.value = prefilledCertId;
+        verifyCertificate(prefilledCertId);
+    } else {
+        input.value = '';
+    }
+
+    btnVerif.onclick = () => {
+        const value = input.value.trim();
+        if (!value) {
+            alert("Saisissez un identifiant.");
+            return;
+        }
+        verifyCertificate(value);
+    };
+
+    document.getElementById('btn-print-certificate').onclick = () => {
+        window.print();
+    };
+}
+
+function verifyCertificate(certId) {
+    const resultCard = document.getElementById('verification-result-card');
+    const errorCard = document.getElementById('verification-error-card');
+    
+    const cert = store.getCertificate(certId);
+    
+    if (cert) {
+        errorCard.style.display = 'none';
+        resultCard.style.display = 'block';
+
+        document.getElementById('cert-display-recipient').textContent = cert.studentName;
+        document.getElementById('cert-display-course').textContent = cert.courseTitle;
+        document.getElementById('cert-display-uuid').textContent = cert.uuid;
+        document.getElementById('cert-display-date').textContent = cert.date;
+
+        // Set dynamic QR Code URL pointing to verification link
+        const verifyUrl = `${window.location.origin}${window.location.pathname}?page=verify&certId=${cert.uuid}`;
+        document.getElementById('cert-display-qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=${encodeURIComponent(verifyUrl)}`;
+    } else {
+        resultCard.style.display = 'none';
+        errorCard.style.display = 'block';
+    }
+}
+
+// ==========================================
+// BACK-OFFICE / FORMATEUR LOGIQUE
+// ==========================================
+let builderModulesCount = 0;
+
+function initBackOfficePage() {
+    // 1. Tab Toggles
+    const tabStudents = document.getElementById('tab-bo-students');
+    const tabBuilder = document.getElementById('tab-bo-builder');
+    const panelStudents = document.getElementById('panel-bo-students');
+    const panelBuilder = document.getElementById('panel-bo-builder');
+
+    if (tabStudents && tabBuilder && panelStudents && panelBuilder) {
+        tabStudents.onclick = async () => {
+            tabStudents.classList.add('active');
+            tabBuilder.classList.remove('active');
+            panelStudents.style.display = 'block';
+            panelBuilder.style.display = 'none';
+            await updateBOStats();
+            await renderBOStudents();
+        };
+
+        tabBuilder.onclick = () => {
+            tabBuilder.classList.add('active');
+            tabStudents.classList.remove('active');
+            panelBuilder.style.display = 'block';
+            panelStudents.style.display = 'none';
+            resetCourseBuilderForm();
+        };
+    }
+
+    // 2. Setup stats counts
+    updateBOStats();
+
+    // 3. Render initial students list
+    renderBOStudents();
+
+    // 4. Modal close handlers
+    const btnCloseModal = document.getElementById('btn-close-bo-modal');
+    const modalElement = document.getElementById('bo-student-modal');
+    if (btnCloseModal && modalElement) {
+        btnCloseModal.onclick = () => {
+            modalElement.style.display = 'none';
+        };
+    }
+
+    // 5. Course builder button triggers
+    const btnAddModule = document.getElementById('btn-builder-add-module');
+    if (btnAddModule) {
+        btnAddModule.onclick = () => {
+            addBuilderModule();
+        };
+    }
+
+    const btnResetBuilder = document.getElementById('btn-builder-reset');
+    if (btnResetBuilder) {
+        btnResetBuilder.onclick = () => {
+            resetCourseBuilderForm();
+        };
+    }
+
+    const formBuilder = document.getElementById('form-course-builder');
+    if (formBuilder) {
+        formBuilder.onsubmit = (e) => {
+            e.preventDefault();
+            saveNewCourse();
+        };
+    }
+}
+
+async function updateBOStats() {
+    const courses = store.getCourses();
+    const students = await store.getRealStudentsData();
+    let certCount = Object.keys(store.state.certificates).length;
+
+    // Count certifications from real students
+    students.forEach(s => {
+        if (s.id !== store.getCurrentUser()?.id) {
+            Object.values(s.courses).forEach(c => {
+                if (c.completed) certCount++;
+            });
+        }
+    });
+
+    document.getElementById('bo-stat-students-count').textContent = students.length;
+    document.getElementById('bo-stat-courses-count').textContent = courses.length;
+    document.getElementById('bo-stat-certs-count').textContent = certCount;
+}
+
+async function renderBOStudents() {
+    const listContainer = document.getElementById('bo-students-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem;">Chargement des élèves depuis Supabase...</td></tr>';
+
+    try {
+        const students = await store.getRealStudentsData();
+        listContainer.innerHTML = '';
+
+        students.forEach(student => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid var(--border-color)';
+            row.style.fontSize = '0.9rem';
+
+            // 1. Student details column
+            const detailsTd = document.createElement('td');
+            detailsTd.style.padding = '1rem 0.5rem';
+            detailsTd.innerHTML = `
+                <strong>${student.name}</strong><br>
+                <span style="color: var(--text-dim); font-size: 0.8rem;">${student.email}</span>
+            `;
+            row.appendChild(detailsTd);
+
+            // 2. Courses names list
+            const coursesTd = document.createElement('td');
+            coursesTd.style.padding = '1rem 0.5rem';
+            const courseTitles = Object.values(student.courses).map(c => c.title).join('<br>');
+            coursesTd.innerHTML = courseTitles || '<span style="color: var(--text-dim);">Aucun cours</span>';
+            row.appendChild(coursesTd);
+
+            // 3. Progress bars column
+            const progressTd = document.createElement('td');
+            progressTd.style.padding = '1rem 0.5rem';
+            const progressLayouts = Object.values(student.courses).map(c => `
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <div style="flex-grow: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; width: 80px;">
+                        <div style="width: ${c.progress}%; height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary));"></div>
+                    </div>
+                    <span style="font-size: 0.75rem; font-weight: bold;">${c.progress}%</span>
+                </div>
+            `).join('');
+            progressTd.innerHTML = progressLayouts || '<span style="color: var(--text-dim);">-</span>';
+            row.appendChild(progressTd);
+
+            // 4. Certificates column
+            const certTd = document.createElement('td');
+            certTd.style.padding = '1rem 0.5rem';
+            const certLayouts = Object.values(student.courses).map(c => {
+                if (c.completed) {
+                    return `<span class="badge" style="background: linear-gradient(135deg, var(--accent), var(--primary)); color: #fff; font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: 4px;">🎓 Certifié</span>`;
+                }
+                return `<span style="color: var(--text-dim); font-size: 0.75rem;">En cours</span>`;
+            }).join('<br>');
+            certTd.innerHTML = certLayouts || '<span style="color: var(--text-dim);">-</span>';
+            row.appendChild(certTd);
+
+            // 5. Action details button column
+            const actionTd = document.createElement('td');
+            actionTd.style.padding = '1rem 0.5rem';
+            actionTd.style.textAlign = 'right';
+            const detailBtn = document.createElement('button');
+            detailBtn.className = 'btn btn-outline';
+            detailBtn.style.padding = '0.35rem 0.7rem';
+            detailBtn.style.fontSize = '0.8rem';
+            detailBtn.textContent = 'Détails 🔎';
+            detailBtn.onclick = () => showStudentDetails(student);
+            actionTd.appendChild(detailBtn);
+            row.appendChild(actionTd);
+
+            listContainer.appendChild(row);
+        });
+    } catch (e) {
+        listContainer.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red; padding:2rem;">Erreur de connexion avec le serveur.</td></tr>';
+    }
+}
+
+function showStudentDetails(student) {
+    document.getElementById('bo-modal-student-name').textContent = student.name;
+    document.getElementById('bo-modal-student-email').textContent = student.email;
+
+    const detailsContainer = document.getElementById('bo-modal-details-container');
+    detailsContainer.innerHTML = '';
+
+    Object.entries(student.courses).forEach(([courseId, courseDetails]) => {
+        const courseCard = document.createElement('div');
+        courseCard.style.background = 'rgba(255, 255, 255, 0.03)';
+        courseCard.style.border = '1px solid var(--border-color)';
+        courseCard.style.padding = '1rem';
+        courseCard.style.borderRadius = 'var(--radius-md)';
+        courseCard.style.marginBottom = '0.75rem';
+
+        let examScoreLayout = `<span style="color: var(--text-dim);">Aucune tentative</span>`;
+        if (courseDetails.examAttempts && courseDetails.examAttempts.length > 0) {
+            examScoreLayout = courseDetails.examAttempts.map((score, idx) => `
+                <div style="font-size: 0.85rem; margin-top: 0.2rem;">
+                    Tentative ${idx + 1} : <strong style="color: ${score >= 0.7 ? 'var(--success)' : 'var(--danger)'};">${Math.round(score * 100)}%</strong>
+                </div>
+            `).join('');
+        }
+
+        courseCard.innerHTML = `
+            <h4 style="font-size: 1.05rem; margin-bottom: 0.5rem; color: #fff;">${courseDetails.title}</h4>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; font-size: 0.85rem;">
+                <span style="color: var(--text-muted);">Progression générale :</span>
+                <strong>${courseDetails.progress}%</strong>
+            </div>
+            
+            <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">
+                <span style="color: var(--text-muted);">Historique de l'examen final :</span>
+                ${examScoreLayout}
+            </div>
+
+            <div style="font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--text-muted);">Statut de certification :</span>
+                ${courseDetails.completed 
+                    ? `<span style="color: var(--success); font-weight: bold;">🎓 Diplôme obtenu</span>` 
+                    : `<span style="color: var(--text-dim);">Non validé</span>`
+                }
+            </div>
+        `;
+        detailsContainer.appendChild(courseCard);
+    });
+
+    document.getElementById('bo-student-modal').style.display = 'flex';
+}
+
+function resetCourseBuilderForm() {
+    document.getElementById('form-course-builder').reset();
+    const container = document.getElementById('builder-modules-list');
+    container.innerHTML = '';
+    builderModulesCount = 0;
+    
+    // Add one default module to start with
+    addBuilderModule();
+}
+
+function addBuilderModule() {
+    builderModulesCount++;
+    const moduleId = `bo-mod-${Date.now()}-${builderModulesCount}`;
+    const moduleContainer = document.getElementById('builder-modules-list');
+
+    const moduleDiv = document.createElement('div');
+    moduleDiv.className = 'card bo-builder-module-card';
+    moduleDiv.style.borderLeft = '4px solid var(--accent)';
+    moduleDiv.style.padding = '1.25rem';
+    moduleDiv.style.position = 'relative';
+    moduleDiv.setAttribute('data-module-id', moduleId);
+
+    moduleDiv.innerHTML = `
+        <button type="button" class="btn btn-outline" style="position: absolute; top: 1rem; right: 1rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; border-color: var(--danger); color: var(--danger);" onclick="this.closest('.bo-builder-module-card').remove()">Supprimer</button>
+        <div style="margin-bottom: 1rem; max-width: 80%;">
+            <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Titre du Module</label>
+            <input type="text" class="module-title-input" placeholder="Ex: Module 1 : Introduction" required style="width: 100%; padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+        </div>
+
+        <div style="padding-left: 1.5rem; border-left: 2px dashed var(--border-color);">
+            <h5 style="font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+                Chapitres & Leçons
+                <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="window.addBuilderChapter('${moduleId}')">+ Ajouter un Chapitre</button>
+            </h5>
+            <div class="chapters-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Chapters loaded here -->
+            </div>
+        </div>
+    `;
+
+    moduleContainer.appendChild(moduleDiv);
+    // Add one chapter automatically
+    addBuilderChapter(moduleId);
+}
+
+function addBuilderChapter(moduleId) {
+    const moduleDiv = document.querySelector(`[data-module-id="${moduleId}"]`);
+    if (!moduleDiv) return;
+    const chaptersContainer = moduleDiv.querySelector('.chapters-container');
+    const chapterId = `bo-chap-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
+
+    const chapterDiv = document.createElement('div');
+    chapterDiv.className = 'bo-builder-chapter-card';
+    chapterDiv.style.background = 'rgba(255,255,255,0.02)';
+    chapterDiv.style.border = '1px solid var(--border-color)';
+    chapterDiv.style.borderRadius = 'var(--radius-sm)';
+    chapterDiv.style.padding = '1rem';
+    chapterDiv.style.position = 'relative';
+    chapterDiv.setAttribute('data-chapter-id', chapterId);
+
+    chapterDiv.innerHTML = `
+        <button type="button" class="btn btn-outline" style="position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.15rem 0.35rem; font-size: 0.7rem; border-color: var(--danger); color: var(--danger);" onclick="this.closest('.bo-builder-chapter-card').remove()">Retirer</button>
+        <div style="margin-bottom: 0.75rem; max-width: 80%;">
+            <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">Titre du Chapitre</label>
+            <input type="text" class="chapter-title-input" placeholder="Ex: Chapitre 1 : Premier Pas" required style="width: 100%; padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff;">
+        </div>
+
+        <div style="padding-left: 1rem; border-left: 1.5px dotted var(--border-color);">
+            <h6 style="font-size: 0.85rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                Leçons
+                <button type="button" class="btn btn-outline" style="padding: 0.15rem 0.35rem; font-size: 0.7rem;" onclick="window.addBuilderLesson('${chapterId}')">+ Leçon</button>
+            </h6>
+            <div class="lessons-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Lessons will be dynamically appended here -->
+            </div>
+        </div>
+    `;
+
+    chaptersContainer.appendChild(chapterDiv);
+    // Add one default lesson
+    addBuilderLesson(chapterId);
+}
+
+function addBuilderLesson(chapterId) {
+    const chapterDiv = document.querySelector(`[data-chapter-id="${chapterId}"]`);
+    if (!chapterDiv) return;
+    const lessonsContainer = chapterDiv.querySelector('.lessons-container');
+    const lessonId = `bo-lesson-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;
+
+    const lessonDiv = document.createElement('div');
+    lessonDiv.className = 'bo-builder-lesson-row';
+    lessonDiv.style.display = 'flex';
+    lessonDiv.style.flexDirection = 'column';
+    lessonDiv.style.gap = '0.5rem';
+    lessonDiv.style.padding = '0.75rem';
+    lessonDiv.style.background = 'rgba(0,0,0,0.2)';
+    lessonDiv.style.border = '1px solid var(--border-color)';
+    lessonDiv.style.borderRadius = 'var(--radius-sm)';
+    lessonDiv.setAttribute('data-lesson-id', lessonId);
+
+    lessonDiv.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <input type="text" class="lesson-title-input" placeholder="Titre de la leçon..." required style="flex-grow: 2; min-width: 150px; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.15); color: #fff; font-size: 0.8rem;">
+            <select class="lesson-type-select" style="min-width: 100px; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #1a1b24; color: #fff; font-size: 0.8rem;" onchange="window.toggleLessonBuilderDetails('${lessonId}')">
+                <option value="video">Vidéo 📹</option>
+                <option value="document" selected>Document 📄</option>
+                <option value="exercise">Exercice Code 💻</option>
+            </select>
+            <button type="button" class="btn btn-outline" style="padding: 0.2rem 0.4rem; font-size: 0.7rem; border-color: var(--danger); color: var(--danger);" onclick="this.closest('.bo-builder-lesson-row').remove()">✖</button>
+        </div>
+        
+        <!-- Standard Content / Embed -->
+        <div class="lesson-content-group">
+            <textarea class="lesson-text-content" rows="2" placeholder="Contenu textuel ou lien d'intégration vidéo..." required style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); color: #fff; font-size: 0.8rem; resize: vertical;"></textarea>
+        </div>
+
+        <!-- Exercise Configurations (Shown only if type === exercise) -->
+        <div class="lesson-exercise-group" style="display: none; padding: 0.5rem; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); gap: 0.5rem; flex-direction: column;">
+            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+                <label style="font-size: 0.75rem; color: var(--text-dim);">Code de départ (initial) :</label>
+                <textarea class="lesson-exercise-code" rows="2" placeholder="// Code de base..." style="width: 100%; font-family: monospace; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #1a1b24; color: #fff; font-size: 0.75rem;"></textarea>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+                <label style="font-size: 0.75rem; color: var(--text-dim);">Regex de validation (les tests automatiques doivent matcher ce pattern) :</label>
+                <input type="text" class="lesson-exercise-regex" placeholder="Ex: ALTER TABLE.*ENABLE ROW LEVEL SECURITY" style="width: 100%; padding: 0.4rem; font-family: monospace; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.2); color: #fff; font-size: 0.75rem;">
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+                <label style="font-size: 0.75rem; color: var(--text-dim);">Indice pédagogique :</label>
+                <input type="text" class="lesson-exercise-hint" placeholder="Ex: Utilisez le mot-clé ENABLE ROW LEVEL SECURITY" style="width: 100%; padding: 0.4rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.2); color: #fff; font-size: 0.75rem;">
+            </div>
+        </div>
+    `;
+
+    lessonsContainer.appendChild(lessonDiv);
+}
+
+function toggleLessonBuilderDetails(lessonId) {
+    const lessonDiv = document.querySelector(`[data-lesson-id="${lessonId}"]`);
+    if (!lessonDiv) return;
+    const typeSelect = lessonDiv.querySelector('.lesson-type-select');
+    const contentGroup = lessonDiv.querySelector('.lesson-content-group');
+    const exerciseGroup = lessonDiv.querySelector('.lesson-exercise-group');
+
+    if (typeSelect.value === 'exercise') {
+        contentGroup.style.display = 'none';
+        exerciseGroup.style.display = 'flex';
+        lessonDiv.querySelector('.lesson-text-content').removeAttribute('required');
+    } else {
+        contentGroup.style.display = 'block';
+        exerciseGroup.style.display = 'none';
+        lessonDiv.querySelector('.lesson-text-content').setAttribute('required', 'required');
+    }
+}
+
+function saveNewCourse() {
+    const title = document.getElementById('builder-course-title').value.trim();
+    const id = document.getElementById('builder-course-id').value.trim();
+    const duration = document.getElementById('builder-course-duration').value.trim();
+    const level = document.getElementById('builder-course-level').value;
+    const desc = document.getElementById('builder-course-desc').value.trim();
+
+    // Check if ID is clean
+    if (!/^[a-z0-9\-]+$/.test(id)) {
+        alert("L'identifiant du cours doit uniquement contenir des lettres minuscules, chiffres et tirets.");
+        return;
+    }
+
+    // Verify unique id
+    const existing = store.getCourses().find(c => c.id === id);
+    if (existing) {
+        alert("Un cours avec cet identifiant existe déjà. Choisissez un autre identifiant.");
+        return;
+    }
+
+    // Retrieve modules
+    const moduleCards = document.querySelectorAll('.bo-builder-module-card');
+    if (moduleCards.length === 0) {
+        alert("Veuillez ajouter au moins un module.");
+        return;
+    }
+
+    const modules = [];
+    let lessonIndex = 1;
+
+    for (let i = 0; i < moduleCards.length; i++) {
+        const mCard = moduleCards[i];
+        const mTitle = mCard.querySelector('.module-title-input').value.trim();
+        const mId = `${id}-mod-${i+1}`;
+
+        const chapterCards = mCard.querySelectorAll('.bo-builder-chapter-card');
+        const chapters = [];
+
+        for (let j = 0; j < chapterCards.length; j++) {
+            const chCard = chapterCards[j];
+            const chTitle = chCard.querySelector('.chapter-title-input').value.trim();
+            const chId = `${mId}-ch-${j+1}`;
+
+            const lessonRows = chCard.querySelectorAll('.bo-builder-lesson-row');
+            const lessons = [];
+
+            for (let k = 0; k < lessonRows.length; k++) {
+                const lRow = lessonRows[k];
+                const lTitle = lRow.querySelector('.lesson-title-input').value.trim();
+                const lType = lRow.querySelector('.lesson-type-select').value;
+                const lId = `${id}-lesson-${lessonIndex++}`;
+
+                const lessonObj = {
+                    id: lId,
+                    title: lTitle,
+                    type: lType
+                };
+
+                if (lType === 'exercise') {
+                    const starterCode = lRow.querySelector('.lesson-exercise-code').value.trim() || '// Saisissez votre code';
+                    const regexVal = lRow.querySelector('.lesson-exercise-regex').value.trim() || '.*';
+                    const hintVal = lRow.querySelector('.lesson-exercise-hint').value.trim() || 'Analysez le sujet pour répondre';
+
+                    lessonObj.exercise = {
+                        instruction: `Complétez l'exercice pratique ci-dessous.`,
+                        starterCode: starterCode,
+                        validationRegex: regexVal,
+                        hint: hintVal
+                    };
+                } else if (lType === 'video') {
+                    const embedVal = lRow.querySelector('.lesson-text-content').value.trim();
+                    lessonObj.videoUrl = embedVal || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+                    lessonObj.content = `Regardez la vidéo explicative ci-dessus pour comprendre les concepts clés de ce chapitre.`;
+                } else { // document
+                    const contentVal = lRow.querySelector('.lesson-text-content').value.trim();
+                    lessonObj.content = contentVal || `Consultez ce document technique pour approfondir le sujet.`;
+                }
+
+                lessons.push(lessonObj);
+            }
+
+            chapters.push({
+                id: chId,
+                title: chTitle,
+                lessons: lessons
+            });
+        }
+
+        // Add a mock Quiz for intermediate module verification
+        modules.push({
+            id: mId,
+            title: mTitle,
+            chapters: chapters,
+            quiz: {
+                quizId: `${mId}-quiz`,
+                title: `Validation de module`,
+                questions: [
+                    {
+                        question: `Validez-vous l'acquisition des compétences de ce module ?`,
+                        options: [
+                            "Oui, absolument !",
+                            "Non, pas encore."
+                        ],
+                        correctIndex: 0
+                    }
+                ]
+            }
+        });
+    }
+
+    // Default mock Exam for the course final certification
+    const examObj = {
+        timeLimit: 15,
+        passingScore: 0.5, // 50%
+        questions: [
+            {
+                question: `Quel est l'objectif principal de cette nouvelle formation (${title}) ?`,
+                options: [
+                    "Valider les acquis pratiques",
+                    "Découvrir de nouveaux horizons",
+                    "Simuler un projet",
+                    "Toutes ces réponses"
+                ],
+                correctIndex: 3
+            }
+        ]
+    };
+
+    const newCourse = {
+        id: id,
+        title: title,
+        description: desc,
+        duration: duration,
+        level: level,
+        levelText: level === 'easy' ? 'Débutant' : (level === 'medium' ? 'Intermédiaire' : 'Avancé'),
+        lessonsCount: lessonIndex - 1,
+        modules: modules,
+        exam: examObj
+    };
+
+    // Save in Store
+    store.addCourse(newCourse);
+    
+    // Success feedback
+    alert(`Félicitations ! Le cours "${title}" a été créé avec succès et est accessible dans le catalogue !`);
+    
+    // Redirect to backoffice home
+    document.getElementById('tab-bo-students').click();
+}
+
+// Make builder actions globally reachable
+window.addBuilderChapter = addBuilderChapter;
+window.addBuilderLesson = addBuilderLesson;
+window.toggleLessonBuilderDetails = toggleLessonBuilderDetails;
+window.initBackOfficePage = initBackOfficePage;
+
+// ==========================================
+// PAYMENT / CHECKOUT SYSTEM (Burkina Faso)
+// ==========================================
+let currentPaymentTab = 'momo';
+let currentMomoOperator = 'orange';
+
+function openCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Reset states
+        document.getElementById('pay-processing').style.display = 'none';
+        document.getElementById('pay-success').style.display = 'none';
+        document.getElementById('pay-phone').value = '';
+        switchPayTab('momo');
+    }
+}
+window.openCheckoutModal = openCheckoutModal;
+
+function closeCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+window.closeCheckoutModal = closeCheckoutModal;
+
+function switchPayTab(tab) {
+    currentPaymentTab = tab;
+    // Update tab button styles
+    const tabs = ['momo', 'card', 'transfer'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`pay-tab-${t}`);
+        const content = document.getElementById(`pay-content-${t}`);
+        if (btn) btn.classList.toggle('active', t === tab);
+        if (content) content.style.display = (t === tab) ? 'flex' : 'none';
+    });
+}
+window.switchPayTab = switchPayTab;
+
+function selectMomoOperator(operator) {
+    currentMomoOperator = operator;
+    const orangeCard = document.getElementById('momo-op-orange');
+    const moovCard = document.getElementById('momo-op-moov');
+    
+    if (orangeCard) orangeCard.classList.toggle('selected', operator === 'orange');
+    if (moovCard) moovCard.classList.toggle('selected', operator === 'moov');
+    
+    const phoneInput = document.getElementById('pay-phone');
+    if (phoneInput) {
+        if (operator === 'orange') {
+            phoneInput.placeholder = '76 00 00 00';
+        } else {
+            phoneInput.placeholder = '70 00 00 00';
+        }
+    }
+}
+window.selectMomoOperator = selectMomoOperator;
+
+function submitMomoPayment() {
+    const phoneVal = document.getElementById('pay-phone').value.trim();
+    if (!phoneVal || phoneVal.length < 8) {
+        alert("Veuillez saisir un numéro de téléphone valide à 8 chiffres.");
+        return;
+    }
+
+    const processing = document.getElementById('pay-processing');
+    const title = document.getElementById('pay-processing-title');
+    const subtitle = document.getElementById('pay-processing-subtitle');
+    
+    if (processing) {
+        processing.style.display = 'flex';
+        
+        // Simulating the USSD push validation cycle
+        const operatorName = currentMomoOperator === 'orange' ? 'Orange Money' : 'Moov Money';
+        const ussdCode = currentMomoOperator === 'orange' ? '*144#' : '*555#';
+        
+        title.textContent = `Demande ${operatorName} envoyée...`;
+        subtitle.innerHTML = `Veuillez patienter. Un pop-up de confirmation de <strong>15 000 FCFA</strong> a été envoyé au +226 ${phoneVal}.<br>Saisissez votre PIN de sécurité (ou tapez <strong>${ussdCode}</strong> si rien ne s'affiche).`;
+        
+        setTimeout(() => {
+            // Step completed
+            const success = document.getElementById('pay-success');
+            if (success) success.style.display = 'flex';
+        }, 3500);
+    }
+}
+window.submitMomoPayment = submitMomoPayment;
+
+function submitCardPayment() {
+    const processing = document.getElementById('pay-processing');
+    if (processing) {
+        processing.style.display = 'flex';
+        document.getElementById('pay-processing-title').textContent = "Validation bancaire (3D Secure)...";
+        document.getElementById('pay-processing-subtitle').textContent = "Vérification des fonds en cours auprès de la banque...";
+        
+        setTimeout(() => {
+            const success = document.getElementById('pay-success');
+            if (success) success.style.display = 'flex';
+        }, 2500);
+    }
+}
+window.submitCardPayment = submitCardPayment;
+
+function submitTransferPayment() {
+    const processing = document.getElementById('pay-processing');
+    if (processing) {
+        processing.style.display = 'flex';
+        document.getElementById('pay-processing-title').textContent = "Envoi du fichier de virement...";
+        document.getElementById('pay-processing-subtitle').textContent = "Traitement de votre preuve de virement par notre service administratif...";
+        
+        setTimeout(() => {
+            const success = document.getElementById('pay-success');
+            if (success) success.style.display = 'flex';
+        }, 2000);
+    }
+}
+window.submitTransferPayment = submitTransferPayment;
+
+async function finalizeSuccessPayment() {
+    await store.setPaid(true);
+    closeCheckoutModal();
+    renderDashboard();
+}
+window.finalizeSuccessPayment = finalizeSuccessPayment;
+
+
+    </script>
+</body>
+</html>
+
+
